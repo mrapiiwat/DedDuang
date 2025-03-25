@@ -36,6 +36,9 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "API_URL": "https://honest-actors-relate.loca.lt/api"
     }
   }
 }
