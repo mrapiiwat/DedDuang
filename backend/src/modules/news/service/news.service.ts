@@ -1,4 +1,4 @@
-import prisma from "../config/prismaClient";
+import prisma from "../../../config/prismaClient";
 import { News } from "../models/news.model";
 
 export const getNews = async (skip: number, limit: number) => {
