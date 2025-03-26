@@ -12,6 +12,9 @@ module.exports = {
         secondary: "#D2B589",
         mybg: "#F2EFEA",
       },
+      fontFamily: {
+        Anakotmai: ["Anakotmai", "sans-serif"],
+      },
     },
   },
   plugins: [],

@@ -1,8 +1,14 @@
 import prisma from "../config/prismaClient";
 import { News } from "../models/news.model";
 
-export const getNews = async () => {
-  return await prisma.news.findMany();
+export const getNews = async (skip: number, limit: number) => {
+  return await prisma.news.findMany({
+    skip: skip,
+    take: limit,
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
 };
 
 export const createNews = async (data: News) => {

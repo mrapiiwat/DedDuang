@@ -18,8 +18,8 @@ const NewsCard: React.FC<{ picUrl: string; linkUrl: any }> = ({
         className="absolute z-10 bottom-0 w-full h-full rounded-b-3xl"
         resizeMode="cover"
       />
-      <Link href={linkUrl} className="text-white font-bold text-4xl z-20 absolute bottom-5 left-7">
-        อ่านต่อ <Text className="text-3xl"> ↗</Text>
+      <Link href={linkUrl} className="text-white font-bold text-3xl z-20 absolute bottom-1 left-6 font-Anakotmai">
+        อ่านต่อ <Text className="text-3xl"> ⬈</Text>
       </Link>
     </View>
   );
