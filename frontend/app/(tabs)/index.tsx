@@ -13,12 +13,6 @@ import Constants from "expo-constants";
 import axios from "axios";
 
 const API_URL = Constants.expoConfig?.extra?.API_URL;
-
-interface NewsItem {
-  url: string;
-  imageUrl: string;
-}
-
 const PAGE_SIZE = 10;
 
 const index: React.FC = () => {
@@ -28,6 +22,12 @@ const index: React.FC = () => {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
 
+  interface NewsItem {
+    title: string;
+    url: string;
+    imageUrl: string;
+  }
+
   const fetchNews = async (reset = false) => {
     if (loading || (!hasMore && !reset)) return;
     setLoading(true);
@@ -36,7 +36,9 @@ const index: React.FC = () => {
       if (!API_URL) throw new Error("API_URL is not defined");
 
       const newPage = reset ? 1 : page;
-      const res = await axios.get(`${API_URL}/news?page=${newPage}&limit=${PAGE_SIZE}`);
+      const res = await axios.get(
+        `${API_URL}/news?page=${newPage}&limit=${PAGE_SIZE}`
+      );
 
       if (reset) {
         setNews(res.data);
@@ -64,8 +66,18 @@ const index: React.FC = () => {
   };
 
   const month: string[] = [
-    "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
-    "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม",
+    "มกราคม",
+    "กุมภาพันธ์",
+    "มีนาคม",
+    "เมษายน",
+    "พฤษภาคม",
+    "มิถุนายน",
+    "กรกฎาคม",
+    "สิงหาคม",
+    "กันยายน",
+    "ตุลาคม",
+    "พฤศจิกายน",
+    "ธันวาคม",
   ];
 
   return (
@@ -78,13 +90,17 @@ const index: React.FC = () => {
       <SafeAreaView>
         <View className="px-6 mb-20">
           <Text className="z-20 font-bold text-[30px] mb-6 mt-5 font-Anakotmai">
-            {`วันที่ ${new Date().getDate()} ${month[new Date().getMonth()]} ${new Date().getFullYear() + 543}`}
+            {`วันที่ ${new Date().getDate()} ${month[new Date().getMonth()]} ${
+              new Date().getFullYear() + 543
+            }`}
           </Text>
 
           {loading && news.length === 0 ? (
             <View className="flex items-center justify-center h-40">
               <ActivityIndicator size="large" color="#0000ff" />
-              <Text className="mt-2 text-gray-500 font-Anakotmai">Loading...</Text>
+              <Text className="mt-2 text-gray-500 font-Anakotmai">
+                Loading...
+              </Text>
             </View>
           ) : (
             <FlatList
@@ -92,9 +108,20 @@ const index: React.FC = () => {
               data={news}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
-                <NewsCard key={item.url} linkUrl={item.url} picUrl={item.imageUrl} />
+                // <View className="mb-4">
+                //     <Text className="text-2xl font-bold font-Anakotmai text-gray-800" numberOfLines={2} ellipsizeMode="tail">
+                //       {item.title}
+                //     </Text>
+                <NewsCard
+                  key={item.url}
+                  linkUrl={item.url}
+                  picUrl={item.imageUrl}
+                />
+                // </View>
               )}
-              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
               contentContainerStyle={{ flexGrow: 1, paddingBottom: 170 }}
               showsVerticalScrollIndicator={false}
               onEndReached={() => fetchNews()}
@@ -103,7 +130,9 @@ const index: React.FC = () => {
                 loading && news.length > 0 ? (
                   <View className="flex items-center justify-center py-4">
                     <ActivityIndicator size="small" color="#0000ff" />
-                    <Text className="mt-2 text-gray-500 font-Anakotmai">Loading more...</Text>
+                    <Text className="mt-2 text-gray-500 font-Anakotmai">
+                      Loading more...
+                    </Text>
                   </View>
                 ) : null
               }

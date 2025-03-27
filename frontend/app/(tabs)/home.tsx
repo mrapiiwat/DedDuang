@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import Profile from "../components/Profile";
+import { useRouter } from "expo-router";
 
 const data = {
   profileImage:
@@ -24,6 +25,20 @@ const bruh = [
 ];
 
 const home = () => {
+  const router = useRouter();
+
+  const handlePress = (item: string) => {
+    const screenName = item.replace(/\s+/g, "");
+    if (item === "ออกจากระบบ") {
+      alert("Logging out...");
+    } else if (item === "เกี่ยวกับเรา") {
+      //@ts-ignore
+      router.push("/(screen)/aboutus");
+    } else {
+      //@ts-ignore
+      router.push(`/(screen)/${screenName}`);
+    }
+  };
   return (
     <SafeAreaView className="flex-1 bg-mybg">
       <View className="p-6">
@@ -35,7 +50,7 @@ const home = () => {
           renderItem={({ item }) => (
             <View className="flex flex-row items-center mb-4 gap-6 ">
               <View className="w-[48] h-[48] bg-[#D9D9D9] rounded-full"></View>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => handlePress(item)}>
                 <Text className="font-Anakotmai text-xl">{item}</Text>
               </TouchableOpacity>
             </View>

@@ -57,6 +57,11 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
             });
           };
 
+          // console.log(route.name); 
+          // if (["[name].tsx"].includes(route.name)) {
+          //   return null;
+          // }
+
           return (
             <PlatformPressable
               key={route.key}
