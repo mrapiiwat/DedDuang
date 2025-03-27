@@ -63,7 +63,7 @@ const index: React.FC = () => {
     setRefreshing(false);
   };
 
-  const month = [
+  const month: string[] = [
     "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
     "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม",
   ];
@@ -84,7 +84,7 @@ const index: React.FC = () => {
           {loading && news.length === 0 ? (
             <View className="flex items-center justify-center h-40">
               <ActivityIndicator size="large" color="#0000ff" />
-              <Text className="mt-2 text-gray-500">Loading...</Text>
+              <Text className="mt-2 text-gray-500 font-Anakotmai">Loading...</Text>
             </View>
           ) : (
             <FlatList
@@ -103,7 +103,7 @@ const index: React.FC = () => {
                 loading && news.length > 0 ? (
                   <View className="flex items-center justify-center py-4">
                     <ActivityIndicator size="small" color="#0000ff" />
-                    <Text className="mt-2 text-gray-500">Loading more...</Text>
+                    <Text className="mt-2 text-gray-500 font-Anakotmai">Loading more...</Text>
                   </View>
                 ) : null
               }

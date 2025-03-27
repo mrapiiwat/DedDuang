@@ -13,7 +13,7 @@ module.exports = {
         mybg: "#F2EFEA",
       },
       fontFamily: {
-        Anakotmai: ["Anakotmai", "sans-serif"],
+        Anakotmai: ["Anakotmai", "arial", "sans-serif"],
       },
     },
   },
