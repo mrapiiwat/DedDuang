@@ -14,6 +14,8 @@ module.exports = {
       },
       fontFamily: {
         Anakotmai: ["Anakotmai", "arial", "sans-serif"],
+        AnakotmaiMedium: ["Anakotmai-Medium", "arial", "sans-serif"],
+        AnakotmaiBold: ["Anakotmai-Bold", "arial", "sans-serif"],
       },
     },
   },

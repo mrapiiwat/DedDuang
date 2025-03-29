@@ -1,12 +1,19 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
-
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useRouter } from "expo-router";
 interface Data {
   profileImage: string;
   name: string;
 }
 
 const Profile: React.FC<{ data: Data }> = ({ data }) => {
+  const router = useRouter();
+  
+  const handlePress = () => {
+    router.push("/(screen)/editProfile");
+  };
+
   return (
     <View className="flex flex-row items-center ">
       <Image
@@ -15,8 +22,13 @@ const Profile: React.FC<{ data: Data }> = ({ data }) => {
         resizeMode="cover"
       />
       <View className=" h-[75] flex flex-col justify-center ml-4">
-        <Text className="font-Anakotmai text-3xl">{data.name}</Text>
-        <Text className="font-Anakotmai">แก้ไขโปรไฟล์ ➤</Text>
+        <Text className="font-AnakotmaiBold text-4xl">
+          {data.name.split(" ")[0]}
+        </Text>
+        <TouchableOpacity onPress={handlePress} className="flex flex-row items-center gap-2">
+          <Text className="font-Anakotmai">แก้ไขโปรไฟล์</Text>
+          <MaterialIcons name="arrow-forward-ios" size={16} color="black" />
+        </TouchableOpacity>
       </View>
     </View>
   );
