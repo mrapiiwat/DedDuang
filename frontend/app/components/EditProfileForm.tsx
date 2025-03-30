@@ -183,6 +183,13 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
             </View>
           </View>
         </View>
+        <View className="w-[90%] mx-auto mt-5 ">
+          <TouchableOpacity className="bg-secondary rounded-xl py-4 mt-6">
+            <Text className="text-center text-white text-2xl font-AnakotmaiMedium">
+              บันทึกข้อมูล
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
