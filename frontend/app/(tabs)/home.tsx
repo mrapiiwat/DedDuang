@@ -50,7 +50,7 @@ const home = () => {
                     resizeMode="contain"
                   />
                 </View>
-                <Text className="font-Anakotmai text-xl">{item}</Text>
+                <Text className="font-Prompt text-xl">{item}</Text>
               </View>
             </TouchableOpacity>
           )}

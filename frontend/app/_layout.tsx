@@ -5,9 +5,9 @@ import "./global.css";
 
 export default function RootLayout() {
   useFonts({
-    Anakotmai: require("../assets/fonts/Anakotmai-Light.ttf"),
-    "Anakotmai-Medium": require("../assets/fonts/Anakotmai-Medium.ttf"),
-    "Anakotmai-Bold": require("../assets/fonts/Anakotmai-Bold.ttf"),
+    Prompt: require("../assets/fonts/Anakotmai-Light.ttf"),
+    "Prompt-Medium": require("../assets/fonts/Prompt-Medium.ttf"),
+    "Prompt-Bold": require("../assets/fonts/Prompt-Bold.ttf"),
   });
 
   return (

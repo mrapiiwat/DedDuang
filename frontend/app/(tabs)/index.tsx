@@ -89,7 +89,7 @@ const index: React.FC = () => {
       />
       <SafeAreaView>
         <View className="px-6 mb-20">
-          <Text className="z-20 font-bold text-[30px] mb-6 mt-5 font-Anakotmai">
+          <Text className="z-20 font-bold text-[30px] mb-6 mt-5 font-Prompt">
             {`วันที่ ${new Date().getDate()} ${month[new Date().getMonth()]} ${
               new Date().getFullYear() + 543
             }`}
@@ -98,7 +98,7 @@ const index: React.FC = () => {
           {loading && news.length === 0 ? (
             <View className="flex items-center justify-center h-40">
               <ActivityIndicator size="large" color="#0000ff" />
-              <Text className="mt-2 text-gray-500 font-Anakotmai">
+              <Text className="mt-2 text-gray-500 font-Prompt">
                 Loading...
               </Text>
             </View>
@@ -109,7 +109,7 @@ const index: React.FC = () => {
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
                 // <View className="mb-4">
-                //     <Text className="text-2xl font-bold font-Anakotmai text-gray-800" numberOfLines={2} ellipsizeMode="tail">
+                //     <Text className="text-2xl font-bold font-Prompt text-gray-800" numberOfLines={2} ellipsizeMode="tail">
                 //       {item.title}
                 //     </Text>
                 <NewsCard
@@ -130,7 +130,7 @@ const index: React.FC = () => {
                 loading && news.length > 0 ? (
                   <View className="flex items-center justify-center py-4">
                     <ActivityIndicator size="small" color="#0000ff" />
-                    <Text className="mt-2 text-gray-500 font-Anakotmai">
+                    <Text className="mt-2 text-gray-500 font-Prompt">
                       Loading more...
                     </Text>
                   </View>

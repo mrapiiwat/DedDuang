@@ -13,9 +13,9 @@ module.exports = {
         mybg: "#F2EFEA",
       },
       fontFamily: {
-        Anakotmai: ["Anakotmai", "arial", "sans-serif"],
-        AnakotmaiMedium: ["Anakotmai-Medium", "arial", "sans-serif"],
-        AnakotmaiBold: ["Anakotmai-Bold", "arial", "sans-serif"],
+        Prompt: ["Prompt", "sans-serif"],
+        PromptMedium: ["Prompt-Medium", "sans-serif"],
+        PromptBold: ["Prompt-Bold", "sans-serif"],
       },
     },
   },

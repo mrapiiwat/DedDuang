@@ -15,7 +15,7 @@ const name = () => {
           className="flex-row items-center"
         >
           <AntDesign name="arrowleft" size={40} color="black" />
-          <Text className="font-bold text-2xl font-Anakotmai ml-3">{name}</Text>
+          <Text className="font-bold text-2xl font-Prompt ml-3">{name}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

@@ -44,7 +44,7 @@ const login = () => {
       <View className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
         <View className="bg-primary w-[370] h-[512] rounded-2xl flex flex-col items-center justify-around">
           <View>
-            <Text className="text-white font-AnakotmaiBold text-5xl">
+            <Text className="text-white font-PromptBold text-5xl">
               เข้าสู่ระบบ
             </Text>
           </View>
@@ -52,7 +52,7 @@ const login = () => {
             <View className="relative w-[300] h-[60] ">
               <TextInput
                 placeholder="อีเมล"
-                className="w-full h-full bg-white mb-4 rounded-full text-2xl font-Anakotmai pl-20"
+                className="w-full h-full bg-white mb-4 rounded-full text-2xl font-Prompt pl-20"
                 onChangeText={(text) => console.log(text)}
               />
               <View className=" absolute top-1/2 -translate-y-1/2 left-1  bg-secondary h-[50] w-[50] rounded-full flex items-center justify-center">
@@ -66,7 +66,7 @@ const login = () => {
             <View className="relative w-[300] h-[60]">
               <TextInput
                 placeholder="รหัสผ่าน"
-                className="w-full h-full bg-white mb-4 rounded-full text-2xl font-Anakotmai pl-20"
+                className="w-full h-full bg-white mb-4 rounded-full text-2xl font-Prompt pl-20"
                 secureTextEntry={true}
                 onChangeText={(text) => console.log(text)}
               />
@@ -84,12 +84,12 @@ const login = () => {
               className="bg-secondary p-5 rounded-full w-[200] h-[60] flex items-center justify-center"
               onPress={() => handleLogin(userData)}
             >
-              <Text className="text-white font-Anakotmai text-2xl">
+              <Text className="text-white font-Prompt text-2xl">
                 เข้าสู่ระบบ
               </Text>
             </TouchableOpacity>
             <TouchableOpacity className="">
-              <Text className="text-white font-Anakotmai text-xl underline text-center mt-8">
+              <Text className="text-white font-Prompt text-xl underline text-center mt-8">
                 ยังไม่ได้เป็นสมาชิก ?
               </Text>
             </TouchableOpacity>

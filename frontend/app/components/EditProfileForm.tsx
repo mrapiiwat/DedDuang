@@ -49,16 +49,16 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
       <View className="flex flex-col gap-4 mt-12">
         {/* ชื่อ */}
         <View className="p-2">
-          <Text className="font-AnakotmaiMedium text-2xl ml-2 mb-4">ชื่อ</Text>
+          <Text className="font-PromptMedium text-2xl ml-2 mb-4">ชื่อ</Text>
           <TextInput
-            className="border-4 border-secondary pt-5 pb-3 px-5 rounded-xl text-2xl font-AnakotmaiMedium"
+            className="border-4 border-secondary pt-5 pb-3 px-5 rounded-xl text-2xl font-PromptMedium"
             placeholder={data.name}
           />
         </View>
 
         {/* วัน/เดือน/ปีเกิด */}
         <View className="p-2">
-          <Text className="font-AnakotmaiMedium text-2xl ml-2 mb-4">
+          <Text className="font-PromptMedium text-2xl ml-2 mb-4">
             วัน/เดือน/ปีเกิด
           </Text>
           <TouchableOpacity
@@ -66,7 +66,7 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
             activeOpacity={0.7}
           >
             <View className="border-4 border-secondary pt-5 pb-3 px-5 rounded-xl">
-              <Text className="text-2xl font-AnakotmaiMedium">
+              <Text className="text-2xl font-PromptMedium">
                 {dateOfBirth.toLocaleDateString("th-TH", {
                   day: "2-digit",
                   month: "long",
@@ -89,7 +89,7 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
         {/* เวลาเกิด + เช็คบ็อกซ์ */}
         <View className="p-2">
           <View className="flex flex-row items-center justify-between">
-            <Text className="font-AnakotmaiMedium text-2xl ml-2 mb-4">
+            <Text className="font-PromptMedium text-2xl ml-2 mb-4">
               เวลาเกิด
             </Text>
           </View>
@@ -100,7 +100,7 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
               activeOpacity={0.7}
             >
               <View className="border-4 border-secondary pt-5 pb-3 px-5 rounded-xl">
-                <Text className="text-2xl font-AnakotmaiMedium">
+                <Text className="text-2xl font-PromptMedium">
                   {timeOfBirth.toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -126,7 +126,7 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
                 onPress={() => setUnknownTime(!unknownTime)}
               />
             </View>
-            <Text className="text-xl font-AnakotmaiMedium">
+            <Text className="text-xl font-PromptMedium">
               ไม่ทราบเวลาเกิด
             </Text>
           </View>
@@ -134,7 +134,7 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
 
         {/* เพศ */}
         <View className="p-2">
-          <Text className="font-AnakotmaiMedium text-2xl ml-2 mb-4">เพศ</Text>
+          <Text className="font-PromptMedium text-2xl ml-2 mb-4">เพศ</Text>
           <View className="flex flex-row items-center gap-4">
             <View className="flex flex-row items-center gap-2">
               <View className="rounded-full border-2 border-secondary">
@@ -143,7 +143,7 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
                   onPress={() => setSex("ชาย")}
                 />
               </View>
-              <Text className="text-2xl font-AnakotmaiMedium">ชาย</Text>
+              <Text className="text-2xl font-PromptMedium">ชาย</Text>
             </View>
             <View className="flex flex-row items-center gap-2 ">
               <View className="rounded-full border-2 border-secondary">
@@ -152,13 +152,13 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
                   onPress={() => setSex("หญิง")}
                 />
               </View>
-              <Text className="text-2xl font-AnakotmaiMedium">หญิง</Text>
+              <Text className="text-2xl font-PromptMedium">หญิง</Text>
             </View>
           </View>
         </View>
         {/* สถานะ */}
         <View className="p-2">
-          <Text className="font-AnakotmaiMedium text-2xl ml-2 mb-4">
+          <Text className="font-PromptMedium text-2xl ml-2 mb-4">
             สถานะความสัมพันธ์
           </Text>
           <View className="flex flex-row items-center gap-4">
@@ -169,7 +169,7 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
                   onPress={() => setStatus("โสด")}
                 />
               </View>
-              <Text className="text-2xl font-AnakotmaiMedium">โสด</Text>
+              <Text className="text-2xl font-PromptMedium">โสด</Text>
             </View>
             <View className="flex flex-row items-center gap-2 ">
               <View className="rounded-full border-2 border-secondary">
@@ -178,13 +178,13 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
                   onPress={() => setStatus("มีคู่")}
                 />
               </View>
-              <Text className="text-2xl font-AnakotmaiMedium">มีคู่</Text>
+              <Text className="text-2xl font-PromptMedium">มีคู่</Text>
             </View>
           </View>
         </View>
         <View className="w-[90%] mx-auto mt-5 ">
           <TouchableOpacity className="bg-secondary rounded-xl py-4 mt-6">
-            <Text className="text-center text-white text-2xl font-AnakotmaiMedium">
+            <Text className="text-center text-white text-2xl font-PromptMedium">
               บันทึกข้อมูล
             </Text>
           </TouchableOpacity>

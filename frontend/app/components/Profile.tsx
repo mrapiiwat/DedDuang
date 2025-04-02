@@ -22,11 +22,11 @@ const Profile: React.FC<{ data: Data }> = ({ data }) => {
         resizeMode="cover"
       />
       <View className=" h-[75] flex flex-col justify-center ml-4">
-        <Text className="font-AnakotmaiBold text-4xl">
+        <Text className="font-PromptBold text-4xl">
           {data.name.split(" ")[0]}
         </Text>
         <TouchableOpacity onPress={handlePress} className="flex flex-row items-center gap-2">
-          <Text className="font-Anakotmai">แก้ไขโปรไฟล์</Text>
+          <Text className="font-Prompt">แก้ไขโปรไฟล์</Text>
           <MaterialIcons name="arrow-forward-ios" size={16} color="black" />
         </TouchableOpacity>
       </View>
