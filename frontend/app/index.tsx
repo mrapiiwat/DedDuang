@@ -6,10 +6,7 @@ const Index: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    setTimeout(
-      () => router.push("/(tabs)"),
-      2000
-    );
+    setTimeout(() => router.push("/(tabs)"), 2000);
   }, []);
 
   return (

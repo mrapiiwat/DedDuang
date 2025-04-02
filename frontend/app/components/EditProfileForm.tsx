@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  Switch,
 } from "react-native";
 import React, { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -31,12 +30,12 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
 
   const handleDateConfirm = (event: any, selectedDate?: Date) => {
     if (selectedDate) setDateOfBirth(selectedDate);
-    setShowDatePicker(false);
+    // setShowDatePicker(false);
   };
 
   const handleTimeConfirm = (event: any, selectedTime?: Date) => {
     if (selectedTime) setTimeOfBirth(selectedTime);
-    setShowTimePicker(false);
+    // setShowTimePicker(false);
   };
 
   return (
