@@ -43,7 +43,7 @@ const login = () => {
       />
       <View className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
         <View className="bg-primary w-[370] h-[512] rounded-2xl flex flex-col items-center justify-around">
-          <View>
+          <View className="mt-10 p-1">
             <Text className="text-white font-PromptBold text-5xl">
               เข้าสู่ระบบ
             </Text>

@@ -21,3 +21,18 @@ model News {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model User {
+  id          String    @id @default(uuid())
+  email       String    @unique
+  password    String
+  name        String?
+  dateOfBirth DateTime
+  timeOfBirth String?
+  image       String?
+  sex         String
+  status      String?
+  role        String    @default("USER")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}

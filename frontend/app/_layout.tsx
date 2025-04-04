@@ -5,7 +5,7 @@ import "./global.css";
 
 export default function RootLayout() {
   useFonts({
-    Prompt: require("../assets/fonts/Anakotmai-Light.ttf"),
+    Prompt: require("../assets/fonts/Prompt-Light.ttf"),
     "Prompt-Medium": require("../assets/fonts/Prompt-Medium.ttf"),
     "Prompt-Bold": require("../assets/fonts/Prompt-Bold.ttf"),
   });
