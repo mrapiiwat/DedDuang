@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import { ZodError } from "zod";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import fs from "fs";
 
 dotenv.config();
 
@@ -13,6 +14,24 @@ export const register = async (req: Request, res: Response) => {
   try {
     const validateData = authSchema.parse(req.body);
     const { password, dateOfBirth } = validateData;
+    const image = req.file;
+
+    //Check if user already exists
+    const existingUser = await authService.findUserByEmail(validateData.email);
+    if (existingUser) {
+      //Delete image if user already exists
+      if (image) {
+        fs.unlink(image.path, (err) => {
+          if (err) {
+            console.error("Error deleting image:", err);
+          }
+        });
+      }
+      res.status(StatusCodes.CONFLICT).json({
+        message: "Email already exists",
+      });
+      return;
+    }
 
     //Hash password
     const salt = await bcrypt.genSalt(10);
@@ -22,6 +41,7 @@ export const register = async (req: Request, res: Response) => {
     const userData = {
       ...validateData,
       password: hashedPassword,
+      image: image?.path,
       dateOfBirth: new Date(dateOfBirth),
     };
 
@@ -102,5 +122,22 @@ export const login = async (req: Request, res: Response) => {
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json("Internal server error");
     }
+  }
+};
+
+export const logout = async (req: Request, res: Response) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+    res.status(StatusCodes.OK).json({
+      message: "Logout successful",
+    });
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: "Internal server error",
+    });
   }
 };

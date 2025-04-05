@@ -1,4 +1,4 @@
-import prisma from "../../../config/prismaClient";
+import prisma from "../../../common/config/prismaClient";
 import { User } from "../models/auth.model";
 
 export const registerService = async (userData: User) => {
