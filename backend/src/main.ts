@@ -11,6 +11,7 @@ import { setupSwagger } from "./common/config/swagger";
 // Import Router
 import newsRoute from "./modules/news/routes/news.route";
 import authRoute from "./modules/auth/routes/auth.route";
+import userRoute from "./modules/user/routes/user.route";
 
 const port = process.env.PORT ? parseInt(process.env.PORT) : 5000;
 const app = express();
@@ -26,15 +27,6 @@ app.use(express.urlencoded({ extended: true }));
 // Setup Swagger
 setupSwagger(app);
 
-// 404 Error Handler
-app.use((req: Request, res: Response, next: NextFunction) => {
-  res.status(404).json({
-    error: `Not Found: ${req.originalUrl}`,
-    message: "The requested resource was not found.",
-    suggestion: `Check the URL or refer to the API documentation at http://localhost:${port}/api-docs.`,
-  });
-});
-
 // Limit requests per IP
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -47,6 +39,7 @@ app.use(limiter); // Apply rate limiting to all requests
 //Routes
 app.use("/api", newsRoute);
 app.use("/api", authRoute);
+app.use("/api", userRoute);
 
 
 app.listen(port, "0.0.0.0", () => {
