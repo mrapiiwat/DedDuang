@@ -6,24 +6,34 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import Profile from "../components/Profile";
 import { useRouter } from "expo-router";
 import { option, imageOption } from "../../utils/option";
+import { useAuthStore } from "@/store/authStore"; // Assuming useAuth provides a signIn function
 
-const data = {
-  profileImage:
-    "https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg",
-  name: "John Doe",
-};
 
 const home = () => {
+  const user = useAuthStore((state) => state.user);
+
+  interface Data {
+    profileImage: string;
+    name: string;
+  }
+
+  const [data, setData] = React.useState<Data>({
+    profileImage: String(user?.image),
+    name: String(user?.name),
+  });  
+
+  const logout = useAuthStore((state) => state.logout);
   const router = useRouter();
 
   const handlePress = (item: string) => {
     const screenName = item.replace(/\s+/g, "");
     if (item === "ออกจากระบบ") {
-      alert("Logging out...");
+      alert("ออกจากระบบเรียบร้อยแล้ว");
+      logout();
     } else if (item === "เกี่ยวกับเรา") {
       //@ts-ignore
       router.push("/(screen)/aboutus");

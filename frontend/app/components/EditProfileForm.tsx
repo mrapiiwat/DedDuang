@@ -6,36 +6,63 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Checkbox } from "react-native-paper";
+import { useAuthStore } from "@/store/authStore";
+import Constants from "expo-constants";
+import axios from "axios";
+import { router, useRouter } from "expo-router";
 
-interface Data {
-  profileImage: string;
-  name: string;
-  dateOfBirth: string;
-  timeOfBirth: string;
-  sex: string;
-  status: string;
-}
+const API_URL = Constants.expoConfig?.extra?.API_URL;
 
-const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
-  const [dateOfBirth, setDateOfBirth] = useState(new Date());
+const EditProfileForm: React.FC = () => {
+  const user = useAuthStore((state) => state.user);
+  const [dateOfBirth, setDateOfBirth] = useState(
+    new Date(user?.dateOfBirth ? user.dateOfBirth : new Date())
+  );
   const [timeOfBirth, setTimeOfBirth] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [unknownTime, setUnknownTime] = useState(false);
-  const [sex, setSex] = useState<string>();
-  const [status, setStatus] = useState<string>();
+  const [sex, setSex] = useState<string>(user?.sex === "ชาย" ? "ชาย" : "หญิง");
+  const [status, setStatus] = useState<string>(
+    user?.status === "โสด" ? "โสด" : "มีคู่"
+  );
+  const [name, setName] = useState<string>();
 
   const handleDateConfirm = (event: any, selectedDate?: Date) => {
     if (selectedDate) setDateOfBirth(selectedDate);
-    // setShowDatePicker(false);
   };
 
   const handleTimeConfirm = (event: any, selectedTime?: Date) => {
     if (selectedTime) setTimeOfBirth(selectedTime);
-    // setShowTimePicker(false);
+  };
+
+  const handleSave = async () => {
+    try {
+      console.log(name);
+      console.log(new Date(dateOfBirth));
+      console.log(new Date(timeOfBirth));
+      console.log(sex);
+      console.log(status);
+
+      await axios.put(
+        `${API_URL}/user/${user?.id}`,
+        {
+          name: name,
+          dateOfBirth: new Date(dateOfBirth),
+          timeOfBirth: unknownTime ? null : new Date(timeOfBirth),
+          sex: sex,
+          status: status,
+        },
+        { withCredentials: true }
+      );
+      alert("บันทึกข้อมูลเรียบร้อยแล้ว");
+      router.push("/(tabs)/home");
+    } catch (err) {
+      console.error("Error saving profile:", err);
+    }
   };
 
   return (
@@ -51,8 +78,10 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
         <View className="p-2">
           <Text className="font-PromptMedium text-2xl ml-2 mb-4">ชื่อ</Text>
           <TextInput
+            value={name}
+            onChangeText={() => setName(name)}
             className="border-4 border-secondary pt-5 pb-3 px-5 rounded-xl text-2xl font-PromptMedium"
-            placeholder={data.name}
+            placeholder={"ชื่อ-นามสกุล"}
           />
         </View>
 
@@ -126,9 +155,7 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
                 onPress={() => setUnknownTime(!unknownTime)}
               />
             </View>
-            <Text className="text-xl font-PromptMedium">
-              ไม่ทราบเวลาเกิด
-            </Text>
+            <Text className="text-xl font-PromptMedium">ไม่ทราบเวลาเกิด</Text>
           </View>
         </View>
 
@@ -183,7 +210,10 @@ const EditProfileForm: React.FC<{ data: Data }> = ({ data }) => {
           </View>
         </View>
         <View className="w-[90%] mx-auto mt-5 ">
-          <TouchableOpacity className="bg-secondary rounded-xl py-4 mt-6">
+          <TouchableOpacity
+            onPress={handleSave}
+            className="bg-secondary rounded-xl py-4 mt-6"
+          >
             <Text className="text-center text-white text-2xl font-PromptMedium">
               บันทึกข้อมูล
             </Text>

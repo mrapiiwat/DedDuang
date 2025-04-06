@@ -1,9 +1,9 @@
 import { Tabs, usePathname, Redirect } from "expo-router";
 import TabBar from "@/app/components/TabBar";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/store/authStore";
 
 const TabsLayout = () => {
-  const { user } = useAuth();
+  const  user  = useAuthStore((state) => state.user);
   const pathname = usePathname();
 
   const protectedRoutes = ["/home", "/seer"];

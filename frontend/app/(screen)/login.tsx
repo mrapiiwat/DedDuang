@@ -1,28 +1,44 @@
-import { View, Text, TextInput, Image, TouchableOpacity } from "react-native";
-import React from "react";
-import { useAuth } from "@/hooks/useAuth";
+import {
+  View,
+  Text,
+  TextInput,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import { loginImage } from "../../utils/loginImage";
 import { useRouter } from "expo-router";
+import { useAuthStore } from "@/store/authStore"; // Assuming useAuth provides a signIn function
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const login = () => {
-  const { login } = useAuth(); // Assuming useAuth provides a signIn function
-  const userData = { id: "1", name: "John Doe" }; // Example user data
+  const login = useAuthStore((state) => state.login);
+  const user = useAuthStore((state) => state.user);
+
   interface User {
-    id: string;
-    name: string;
+    email: string;
+    password: string;
   }
+  const [userData, setUserData] = useState<User>({
+    email: "",
+    password: "",
+  });
 
   const router = useRouter(); // Use the router from expo-router
-  const handleLogin = (userData: User) => {
+  const handleLogin = async (userData: User) => {
     if (!userData) {
       console.log("No user data provided");
       return;
     }
-    login(userData); // Call the signIn function when the button is pressed
-    
-    console.log("Login successful", userData);
-    router.push("/home"); // Navigate to the home screen after login
+
+    await login(userData.email, userData.password);
   };
+
+  useEffect(() => {
+    if (user) {
+      router.push("/(tabs)");
+    }
+  }, [user]);
 
   return (
     <View className="flex-1 flex items-center justify-center relative">
@@ -41,19 +57,33 @@ const login = () => {
         className="w-full h-40 absolute bottom-0 z-20"
         resizeMode="cover"
       />
+      <View className="absolute top-14 left-6 z-30">
+        <TouchableOpacity
+          onPress={() => router.push("/(tabs)")}
+          className="flex-row items-center"
+        >
+          <AntDesign name="arrowleft" size={40} color="black" />
+          <Text className="font-bold text-2xl font-Prompt ml-3">ย้อนกลับ</Text>
+        </TouchableOpacity>
+      </View>
+
       <View className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
         <View className="bg-primary w-[370] h-[512] rounded-2xl flex flex-col items-center justify-around">
-          <View className="mt-10 p-1">
-            <Text className="text-white font-PromptBold text-5xl">
-              เข้าสู่ระบบ
-            </Text>
+          <View className="mt-10 p-1 flex items-center justify-center">
+            <View>
+              <Text className="text-white font-Prompt text-6xl text-center ">
+                เข้าสู่ระบบ
+              </Text>
+            </View>
           </View>
           <View className="gap-8">
             <View className="relative w-[300] h-[60] ">
               <TextInput
                 placeholder="อีเมล"
                 className="w-full h-full bg-white mb-4 rounded-full text-2xl font-Prompt pl-20"
-                onChangeText={(text) => console.log(text)}
+                onChangeText={(text) =>
+                  setUserData({ ...userData, email: text })
+                }
               />
               <View className=" absolute top-1/2 -translate-y-1/2 left-1  bg-secondary h-[50] w-[50] rounded-full flex items-center justify-center">
                 <Image
@@ -68,7 +98,9 @@ const login = () => {
                 placeholder="รหัสผ่าน"
                 className="w-full h-full bg-white mb-4 rounded-full text-2xl font-Prompt pl-20"
                 secureTextEntry={true}
-                onChangeText={(text) => console.log(text)}
+                onChangeText={(text) =>
+                  setUserData({ ...userData, password: text })
+                }
               />
               <View className=" absolute top-1/2 -translate-y-1/2 left-1  bg-secondary h-[50] w-[50] rounded-full flex items-center justify-center">
                 <Image

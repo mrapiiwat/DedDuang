@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
+import path from "path";
 
 //Swagger Setup
 import { setupSwagger } from "./common/config/swagger";
@@ -23,6 +24,8 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')));
+
 
 // Setup Swagger
 setupSwagger(app);

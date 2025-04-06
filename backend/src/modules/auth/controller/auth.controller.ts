@@ -109,6 +109,17 @@ export const login = async (req: Request, res: Response) => {
 
     res.status(StatusCodes.OK).json({
       message: `Login successful. Welcome back, ${user.email}!`,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        dateOfBirth: user.dateOfBirth,
+        timeOfBirth: user.timeOfBirth,
+        image: user.image,
+        sex: user.sex,
+        status: user.status,
+      },
+      token: token,
     });
   } catch (error) {
     if (error instanceof ZodError) {

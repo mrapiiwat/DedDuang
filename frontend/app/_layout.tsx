@@ -1,9 +1,14 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import { AuthProvider } from "@/hooks/useAuth";
 import "./global.css";
+import { useAuthStore } from "@/store/authStore";
 
 export default function RootLayout() {
+  
+  const checkAuth = useAuthStore((state) => state.checkAuth);
+  
+  checkAuth();
+
   useFonts({
     Prompt: require("../assets/fonts/Prompt-Light.ttf"),
     "Prompt-Medium": require("../assets/fonts/Prompt-Medium.ttf"),
@@ -11,14 +16,12 @@ export default function RootLayout() {
   });
 
   return (
-    <AuthProvider>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen
-          name="(tabs)"
-          options={{ animation: "fade", gestureEnabled: false }}
-        />
-      </Stack>
-    </AuthProvider>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Screen
+        name="(tabs)"
+        options={{ animation: "fade", gestureEnabled: false }}
+      />
+    </Stack>
   );
 }
