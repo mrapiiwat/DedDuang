@@ -3,18 +3,20 @@ import React from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
 import Constants from "expo-constants";
-const API_URL = Constants.expoConfig?.extra?.API_URL;
-interface Data {
-  profileImage: string;
-  name: string;
-}
+import { useAuthStore } from "@/store/authStore";
 
-const Profile: React.FC<{ data: Data }> = ({ data }) => {
+const API_URL = Constants.expoConfig?.extra?.API_URL;
+
+const Profile: React.FC = () => {
+  const refreshUser = useAuthStore((state) => state.refreshUser);
+  const data = useAuthStore((state) => state.user);
   const router = useRouter();
 
-  const ImgageUri = `${API_URL?.replace(/\/api$/, "")}/uploads/${data.profileImage}`;
-  console.log("Image URI:", ImgageUri); // Log the image URI for debugging
-  const handlePress = () => {
+  const ImgageUri = `${API_URL?.replace(/\/api$/, "")}/uploads/${
+    data?.image
+  }`;
+  const handlePress = async () => {
+    await refreshUser();
     router.push("/(screen)/editProfile");
   };
 
@@ -27,7 +29,7 @@ const Profile: React.FC<{ data: Data }> = ({ data }) => {
       />
       <View className=" h-[75] flex flex-col justify-center ml-4">
         <Text className="font-PromptBold text-4xl">
-          {data.name.split(" ")[0]}
+          {data?.name.split(" ")[0]}
         </Text>
         <TouchableOpacity
           onPress={handlePress}

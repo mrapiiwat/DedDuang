@@ -12,19 +12,15 @@ import { useRouter } from "expo-router";
 import { option, imageOption } from "../../utils/option";
 import { useAuthStore } from "@/store/authStore"; // Assuming useAuth provides a signIn function
 
-
 const home = () => {
-  const user = useAuthStore((state) => state.user);
+  const refreshUser = useAuthStore((state) => state.refreshUser);
 
-  interface Data {
-    profileImage: string;
-    name: string;
-  }
-
-  const [data, setData] = React.useState<Data>({
-    profileImage: String(user?.image),
-    name: String(user?.name),
-  });  
+  useEffect(() => {
+    const fetchUser = async () => {
+      await refreshUser();
+    };
+    fetchUser();
+  }, []);
 
   const logout = useAuthStore((state) => state.logout);
   const router = useRouter();
@@ -45,7 +41,7 @@ const home = () => {
   return (
     <SafeAreaView className="flex-1 bg-mybg">
       <View className="p-6">
-        <Profile data={data} />
+        <Profile />
         <FlatList
           data={option}
           className="bg-[#FEFFFF] w-full h-[78%] rounded-3xl mt-8 p-8"

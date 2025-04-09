@@ -6,30 +6,34 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Checkbox } from "react-native-paper";
 import { useAuthStore } from "@/store/authStore";
 import Constants from "expo-constants";
 import axios from "axios";
-import { router, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 const API_URL = Constants.expoConfig?.extra?.API_URL;
 
 const EditProfileForm: React.FC = () => {
+  const router = useRouter();
   const user = useAuthStore((state) => state.user);
+  const refreshUser = useAuthStore((state) => state.refreshUser);
   const [dateOfBirth, setDateOfBirth] = useState(
     new Date(user?.dateOfBirth ? user.dateOfBirth : new Date())
   );
   const [timeOfBirth, setTimeOfBirth] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [unknownTime, setUnknownTime] = useState(false);
+  const [unknownTime, setUnknownTime] = useState(user?.timeOfBirth == null ? true : false);
   const [sex, setSex] = useState<string>(user?.sex === "ชาย" ? "ชาย" : "หญิง");
   const [status, setStatus] = useState<string>(
     user?.status === "โสด" ? "โสด" : "มีคู่"
   );
-  const [name, setName] = useState<string>();
+  const [name, setName] = useState<string>(
+    user?.name ? user.name.toString() : ""
+  );
 
   const handleDateConfirm = (event: any, selectedDate?: Date) => {
     if (selectedDate) setDateOfBirth(selectedDate);
@@ -41,23 +45,23 @@ const EditProfileForm: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      console.log(name);
-      console.log(new Date(dateOfBirth));
-      console.log(new Date(timeOfBirth));
-      console.log(sex);
-      console.log(status);
+      if (!name) {
+        alert("กรุณากรอกชื่อ-นามสกุล");
+        return;
+      }
 
-      await axios.put(
-        `${API_URL}/user/${user?.id}`,
-        {
-          name: name,
-          dateOfBirth: new Date(dateOfBirth),
-          timeOfBirth: unknownTime ? null : new Date(timeOfBirth),
-          sex: sex,
-          status: status,
-        },
-        { withCredentials: true }
-      );
+      const trimID = user?.id?.trim();
+
+      const formattedDateOfBirth = dateOfBirth.toISOString().split("T")[0];
+
+      await axios.put(`${API_URL}/user/${trimID}`, {
+        name: name,
+        dateOfBirth: formattedDateOfBirth.toString(),
+        timeOfBirth: `${unknownTime ? null : timeOfBirth}`,
+        sex: sex,
+        status: status,
+      });
+      await refreshUser();
       alert("บันทึกข้อมูลเรียบร้อยแล้ว");
       router.push("/(tabs)/home");
     } catch (err) {
@@ -79,7 +83,7 @@ const EditProfileForm: React.FC = () => {
           <Text className="font-PromptMedium text-2xl ml-2 mb-4">ชื่อ</Text>
           <TextInput
             value={name}
-            onChangeText={() => setName(name)}
+            onChangeText={(text) => setName(text)}
             className="border-4 border-secondary pt-5 pb-3 px-5 rounded-xl text-2xl font-PromptMedium"
             placeholder={"ชื่อ-นามสกุล"}
           />

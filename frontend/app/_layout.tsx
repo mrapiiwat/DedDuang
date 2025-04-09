@@ -4,9 +4,8 @@ import "./global.css";
 import { useAuthStore } from "@/store/authStore";
 
 export default function RootLayout() {
-  
   const checkAuth = useAuthStore((state) => state.checkAuth);
-  
+
   checkAuth();
 
   useFonts({

@@ -23,12 +23,18 @@ interface AuthStore {
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
+  clearToken: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   token: null,
   isAuthenticated: false,
+  clearToken: async () => {
+    set({ token: null });
+    await AsyncStorage.removeItem("token");
+  },
   login: async (email: string, password: string) => {
     try {
       const response = await axios.post(
@@ -78,4 +84,16 @@ export const useAuthStore = create<AuthStore>((set) => ({
       console.error("Error Checking auth status:", error);
     }
   },
+  refreshUser: async () => {
+    try {
+      const storedUser = await AsyncStorage.getItem("user");
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        const response = await axios.get(`${API_URL}/user/${parsedUser.id}`);
+        set({ user: response.data });
+      }
+    } catch (error) {
+      console.error("Error refreshing user:", error);
+    }
+  }
 }));

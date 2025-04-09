@@ -37,7 +37,7 @@ const limiter = rateLimit({
   message: "Too many requests, please try again later.",
 });
 
-app.use(limiter); // Apply rate limiting to all requests
+// app.use(limiter); // Apply rate limiting to all requests
 
 //Routes
 app.use("/api", newsRoute);

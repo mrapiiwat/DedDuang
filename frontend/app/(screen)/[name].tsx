@@ -3,6 +3,7 @@ import React from "react";
 import { useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
+import Zodiac from "../components/zodiac";
 const name = () => {
   const { name } = useLocalSearchParams();
   const router = useRouter();
@@ -18,6 +19,7 @@ const name = () => {
           <Text className="font-bold text-2xl font-Prompt ml-3">{name}</Text>
         </TouchableOpacity>
       </View>
+      {name === "ดูฤกษ์ราศี" ? <Zodiac /> : name === "ดูปีชง" ? <></> : name==="ดูไพ่ทาโร"}
     </SafeAreaView>
   );
 };
