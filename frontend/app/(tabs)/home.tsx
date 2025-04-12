@@ -32,7 +32,7 @@ const home = () => {
       logout();
     } else if (item === "เกี่ยวกับเรา") {
       //@ts-ignore
-      router.push("/(screen)/aboutus");
+      router.push("/(screen)/เกี่ยวกับเรา");
     } else {
       //@ts-ignore
       router.push(`/(screen)/${screenName}`);

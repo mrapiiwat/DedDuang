@@ -4,6 +4,11 @@ import { useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
 import Zodiac from "../components/zodiac";
+import CursedYear from "../components/cursedYear";
+import Tarot from "../components/tarot";
+import Seemsee from "../components/seemsee";
+import About from "../components/about";
+
 const name = () => {
   const { name } = useLocalSearchParams();
   const router = useRouter();
@@ -19,7 +24,19 @@ const name = () => {
           <Text className="font-bold text-2xl font-Prompt ml-3">{name}</Text>
         </TouchableOpacity>
       </View>
-      {name === "ดูฤกษ์ราศี" ? <Zodiac /> : name === "ดูปีชง" ? <></> : name==="ดูไพ่ทาโร"}
+      {name === "ดูฤกษ์ราศี" ? (
+        <Zodiac />
+      ) : name === "ดูปีชง" ? (
+        <CursedYear />
+      ) : name === "ดูไพทาโรต์" ? (
+        <Tarot />
+      ) : name === "เสี่ยงเซียมซี" ? (
+        <Seemsee />
+      ) : name === "เกี่ยวกับเรา" ? (
+        <About />
+      ) : (
+        <Text>Not found 404</Text>
+      )}
     </SafeAreaView>
   );
 };

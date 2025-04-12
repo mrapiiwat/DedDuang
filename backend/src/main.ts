@@ -33,7 +33,7 @@ setupSwagger(app);
 // Limit requests per IP
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 10,
+  max: 20,
   message: "Too many requests, please try again later.",
 });
 
