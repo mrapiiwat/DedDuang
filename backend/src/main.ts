@@ -13,6 +13,7 @@ import { setupSwagger } from "./common/config/swagger";
 import newsRoute from "./modules/news/routes/news.route";
 import authRoute from "./modules/auth/routes/auth.route";
 import userRoute from "./modules/user/routes/user.route";
+import categoryRoute from "./modules/category/routes/category.route";
 
 const port = process.env.PORT ? parseInt(process.env.PORT) : 5000;
 const app = express();
@@ -43,6 +44,7 @@ const limiter = rateLimit({
 app.use("/api", newsRoute);
 app.use("/api", authRoute);
 app.use("/api", userRoute);
+app.use("/api", categoryRoute);
 
 
 app.listen(port, "0.0.0.0", () => {
