@@ -18,6 +18,13 @@ export const createCategory = async (data: Category) => {
   });
 };
 
+export const updateCategory = async (id: string, data: Category) => {
+  return await prisma.category.update({
+    where: { id },
+    data,
+  });
+}
+
 export const deleteCategory = async (id: string) => {
   return await prisma.category.delete({
     where: { id },

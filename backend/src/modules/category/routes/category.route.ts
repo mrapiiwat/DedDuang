@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as categoryController from "../controller/category.controller";
+import authorizeAdmin from "../../../common/middleware/authorizeAdmin";
 
 const router = Router();
 
@@ -16,7 +17,7 @@ const router = Router();
  *           type: string
  *           example: "Skincare"
  */
-router.post("/category", categoryController.createCategory);
+router.post("/category", authorizeAdmin, categoryController.createCategory);
 /**
  * @swagger
  * /api/category:
@@ -24,6 +25,8 @@ router.post("/category", categoryController.createCategory);
  *     summary: Create a new category
  *     description: Creates a new category in the database
  *     tags: [Category]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -45,14 +48,6 @@ router.post("/category", categoryController.createCategory);
  *                   $ref: '#/components/schemas/Category'
  *       400:
  *         description: Bad request due to validation error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Name is required
  *       500:
  *         description: Internal server error
  */
@@ -115,7 +110,50 @@ router.get("/category/:id", categoryController.getCategory);
  *       500:
  *         description: Internal server error
  */
-router.delete("/category/:id", categoryController.deleteCategory);
+router.put("/category/:id", authorizeAdmin, categoryController.updateCategory);
+/**
+ * @swagger
+ * /api/category/{id}:
+ *   put:
+ *     summary: Update category by ID
+ *     description: Updates an existing category's name by its ID
+ *     tags: [Category]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the category to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Category'
+ *     responses:
+ *       200:
+ *         description: Category updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Category updated successfully
+ *                 data:
+ *                   $ref: '#/components/schemas/Category'
+ *       400:
+ *         description: Bad request due to validation error
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete("/category/:id", authorizeAdmin, categoryController.deleteCategory);
 /**
  * @swagger
  * /api/category/{id}:
@@ -123,6 +161,8 @@ router.delete("/category/:id", categoryController.deleteCategory);
  *     summary: Delete category by ID
  *     description: Deletes a single category by its ID
  *     tags: [Category]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
