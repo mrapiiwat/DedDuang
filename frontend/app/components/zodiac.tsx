@@ -2,7 +2,10 @@ import { ScrollView, Image, Text, View } from "react-native";
 import React, { useState } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { zodiacSign } from "@/utils/zodi";
-import name from "../(screen)/[name]";
+import Constants from "expo-constants";
+import axios from "axios";
+
+const API_URL = Constants.expoConfig?.extra?.API_URL;
 
 const Zodiac = () => {
   const user = useAuthStore((state) => state.user);
@@ -21,9 +24,18 @@ const Zodiac = () => {
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  
+  const res = zodiacSign(month, day);
 
-  zodiacSign(month, day);
+  const fetchZodiac = async () => {
+    try {
+      if (!API_URL) throw new Error("API_URL is not defined");
+
+      const res = await axios.get(`${API_URL}/category/e62b08e2-4ae8-42de-a96f-2fef94eff5a0`);
+      
+    } catch (error) {
+      console.error("Error fetching zodiac:", error);
+    }
+  };
 
   const mockData = {
     name: "ราศีเมถุน",
