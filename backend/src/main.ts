@@ -14,6 +14,7 @@ import newsRoute from "./modules/news/routes/news.route";
 import authRoute from "./modules/auth/routes/auth.route";
 import userRoute from "./modules/user/routes/user.route";
 import itemRoute from "./modules/item/routes/item.route";
+import openAI from "./modules/openai/routes/openai.route";
 import categoryRoute from "./modules/category/routes/category.route";
 
 const port = process.env.PORT ? parseInt(process.env.PORT) : 5000;
@@ -46,6 +47,7 @@ app.use("/api", authRoute);
 app.use("/api", userRoute);
 app.use("/api", itemRoute);
 app.use("/api", categoryRoute);
+app.use("/api", openAI);
 
 app.listen(port, "0.0.0.0", () => {
   console.log(`🚀 Server is running on http://localhost:${port}`);
