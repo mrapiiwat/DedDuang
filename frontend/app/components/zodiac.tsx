@@ -1,62 +1,81 @@
-import { ScrollView, Image, Text, View } from "react-native";
-import React, { useState } from "react";
+import { ScrollView, Image, Text, View, ActivityIndicator } from "react-native";
+import React, { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { zodiacSign } from "@/utils/zodi";
 import Constants from "expo-constants";
 import axios from "axios";
+import { useRouter } from "expo-router";
 
 const API_URL = Constants.expoConfig?.extra?.API_URL;
 
+interface ZodiacData {
+  name: string;
+  image: string;
+  description: string;
+}
+
 const Zodiac = () => {
+  const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const refreshUser = useAuthStore((state) => state.refreshUser);
-  const [Zodiac, setZodiac] = useState<string>("");
-
-  refreshUser();
+  const [Zodiac, setZodiac] = useState<ZodiacData>();
+  const [isLoading, setIsLoading] = useState(true);
 
   if (!user) {
     alert("กรุณาเข้าสู่ระบบก่อน");
     return null;
   }
-  const { dateOfBirth, timeOfBirth } = user;
 
+  if (!user.dateOfBirth) {
+    alert("กรุณาเพิ่มวันเกิดก่อน");
+    return router.push("/(screen)/editProfile");
+  }
+
+  const { dateOfBirth } = user;
   const date = new Date(dateOfBirth);
   const month = date.getMonth() + 1;
   const day = date.getDate();
-
-  const res = zodiacSign(month, day);
+  const resZodi = zodiacSign(month, day);
 
   const fetchZodiac = async () => {
     try {
       if (!API_URL) throw new Error("API_URL is not defined");
 
-      const res = await axios.get(`${API_URL}/category/e62b08e2-4ae8-42de-a96f-2fef94eff5a0`);
-      
+      const res = await axios.get(`${API_URL}/item/${resZodi}`);
+      setZodiac(res.data.data);
     } catch (error) {
       console.error("Error fetching zodiac:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const mockData = {
-    name: "ราศีเมถุน",
-    image:
-      "https://s3-alpha-sig.figma.com/img/71dc/6721/d7f9d352f744382136cc99a06b45bd61?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=QMewktjp6XoMt3W6Bbhgwuhb81fvAqbtsHRUCnsN2R7d6w~zDqbmgR4zyBQGOmpQ-C1m2BJx2l2N9~v0rNYhTXpd30el-aGyPFmSTQ1JZTtxRzbuq434uYGbj~E5IsburVFXujyBWA7R4CiMd0c-3C9zHkarpHkG1hxXnkqgAKfziaoxAPimLAbLsTezDhe3hYONTTgQYi1--JcdunNnwdIgT43S8oVLLdEdrEwVLZV8ADeE3ztplWufTD0YBxwM3XUmaDg0t6CZ~~gVsmCVgNk9buHvHWIep-10MDIAN-ud6ob9hgFi0PyVQe9d-wnb6MIx1Rl56UE~zM~iDGrYlw__",
-    text: "ราศีเมถุนหรือราศีคนคู่เป็นดาวที่อยู่ใต้อิทธิพลของดาวพุธหรือเมอร์คิวรี (Mercury) ซึ่งเป็นเทพแห่งการสื่อสาร มีของวิเศษเป็นรองเท้าและหมวกมีปีก ซึ่งถือเป็นตัวแทนของอุปนิสัยที่รู้จักปรับตัวและยืดหยุ่น ผู้ที่อยู่ในราศีนี้จึงรู้จักวิธีรับมือกับสถานการณ์ทุกประเภท แม้บางทีจะดูเหมือนโชคชะตาเล่นตลกแต่คนกลุ่มนี้ก็ยังรู้จักปรับตัวให้เข้ากับสิ่งรอบข้าง หรือแม้กระทั่งปรับความคิดและหลักจริยธรรมให้สอดคล้องกับโลกที่เปลี่ยนแปลงได้ ส่วนลักษณะนิสัยในทางลบของราศีนี้คือ การเป็นคนร้อนรน ขี้กระวนกระวายใจ การจะทำความเข้าใจคนในราศีนี้ให้ถ่องแท้เป็นเรื่องยาก เพราะราศีนี้ประกอบด้วยสติปัญญาและความรอบรู้เป็นจุดเด่น และมีความสนุกสนานร่าเริงอย่างวัยหนุ่มสาวเป็นอุปนิสัยโดยธรรมชาติ เมอร์คิวรี นอกจากถือเป็นเทพแห่งการสื่อสารแล้ว ยังมาพร้อมกับคุณสมบัติด้านวิทยาศาสตร์ การค้าขาย เป็นนักคิด อยากรู้อยากเห็น และการเดินทางด้วย ในด้านหนึ่งคนในราศีนี้สามารถโกหกคนได้อย่างหน้าตาย แต่ในอีกด้านหนึ่งหากมีใครมาหลอกลวงก็สามารถรู้ได้ทะลุปรุโปร่งเช่นกัน",
-  };
+  useEffect(() => {
+    refreshUser();
+    fetchZodiac();
+  }, []);
 
   return (
     <View className="flex justify-center items-center mt-10">
-      <Image
-        source={{
-          uri: mockData.image,
-        }}
-        style={{ width: 199, height: 199 }}
-        resizeMode="contain"
-      />
-      <Text className="my-10 text-4xl font-bold">{mockData.name}</Text>
+      {isLoading ? (
+        <View className="w-[199] h-[199] flex items-center justify-center">
+          <ActivityIndicator size="large" color="#000" />
+          <Text className="mt-2 font-Prompt text-gray-500">กำลังโหลด...</Text>
+        </View>
+      ) : (
+        <>
+          <Image
+            source={{ uri: Zodiac?.image }}
+            style={{ width: 199, height: 199 }}
+            resizeMode="contain"
+          />
+          <Text className="my-10 text-4xl font-bold">{Zodiac?.name}</Text>
+        </>
+      )}
+
       <ScrollView className="bg-[##E9E6E1] p-10 rounded-t-[50] w-full h-[80%] ">
         <Text className="text-lg font-Prompt text-center mb-5">
-          {mockData.text}
+          {Zodiac?.description}
         </Text>
       </ScrollView>
     </View>

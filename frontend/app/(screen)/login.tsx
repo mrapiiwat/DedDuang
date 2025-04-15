@@ -120,7 +120,7 @@ const login = () => {
                 เข้าสู่ระบบ
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity className="">
+            <TouchableOpacity onPress={() => router.push("/(screen)/register")}>
               <Text className="text-white font-Prompt text-xl underline text-center mt-8">
                 ยังไม่ได้เป็นสมาชิก ?
               </Text>

@@ -39,10 +39,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     try {
       const response = await axios.post(
         `${API_URL}/login`,
-        {
-          email,
-          password,
-        },
+        { email, password },
         { withCredentials: true }
       );
 
@@ -55,6 +52,14 @@ export const useAuthStore = create<AuthStore>((set) => ({
       await AsyncStorage.setItem("token", token);
     } catch (error) {
       console.error("Login error:", error);
+
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message || "เข้าสู่ระบบล้มเหลว โปรดลองอีกครั้ง";
+        throw new Error(message);
+      } else {
+        throw new Error("เกิดข้อผิดพลาดที่ไม่คาดคิด");
+      }
     }
   },
   logout: async () => {
@@ -95,5 +100,5 @@ export const useAuthStore = create<AuthStore>((set) => ({
     } catch (error) {
       console.error("Error refreshing user:", error);
     }
-  }
+  },
 }));
