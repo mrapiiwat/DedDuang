@@ -13,7 +13,7 @@ export const authSchema = z.object({
   timeOfBirth: z.string().min(1, "Time of Birth is required").optional(),
   image: z.string().optional(),
   sex: z.enum(["ชาย", "หญิง"]),
-  status: z.enum(["มีคู่", "โสด"]),
+  status: z.enum(["มีคู่", "โสด"]).optional(),
   role: z.enum(["ADMIN", "USER"]).optional(),
 });
 
@@ -30,6 +30,6 @@ export interface User {
   timeOfBirth?: string;
   image?: string;
   sex: "ชาย" | "หญิง";
-  status: "มีคู่" | "โสด";
+  status?: "มีคู่" | "โสด";
   role?: "ADMIN" | "USER";
 }

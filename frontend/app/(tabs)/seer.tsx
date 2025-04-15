@@ -14,15 +14,18 @@ import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import Constants from "expo-constants";
 import { useAuthStore } from "../../store/authStore";
+import { useRouter } from "expo-router";
 
 const API_URL = `${Constants.expoConfig?.extra?.API_URL}/openai/chat`;
 
 const Seer = () => {
   const user = useAuthStore((state) => state.user);
-  const ImgageUri = `${API_URL?.replace(/\/api\/openai\/chat$/, "")}/uploads/${
-    user?.image
-  }`;
-  console.log("Image URI:", ImgageUri);
+  const router = useRouter();
+  
+  if (!user?.timeOfBirth || !user?.status || !user?.name) {
+    alert("กรุณากรอกข้อมูลส่วนตัวให้ครบถ้วนก่อนใช้งาน");
+    return router.push("/(screen)/editProfile");
+  }
 
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
