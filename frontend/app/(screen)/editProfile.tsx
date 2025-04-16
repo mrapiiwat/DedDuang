@@ -5,8 +5,9 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -23,6 +24,8 @@ const EditProfileScreen = () => {
   const user = useAuthStore((state) => state.user);
   const refreshUser = useAuthStore((state) => state.refreshUser);
 
+  const [isUploading, setIsUploading] = useState(false);
+
   const imageUri = `${API_URL?.replace(/\/api$/, "")}/uploads/${user?.image}`;
 
   const updateProfileImage = async () => {
@@ -34,7 +37,7 @@ const EditProfileScreen = () => {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images, 
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
@@ -59,9 +62,12 @@ const EditProfileScreen = () => {
       formData.append("status", `${user?.status}`);
 
       try {
+        setIsUploading(true);
+
         const userId = user?.id?.trim();
         if (!userId) {
           alert("ไม่พบรหัสผู้ใช้");
+          setIsUploading(false);
           return;
         }
 
@@ -83,6 +89,8 @@ const EditProfileScreen = () => {
           console.error("เกิดข้อผิดพลาด:", error);
         }
         alert("อัปโหลดรูปไม่สำเร็จ");
+      } finally {
+        setIsUploading(false);
       }
     }
   };
@@ -105,13 +113,23 @@ const EditProfileScreen = () => {
         <View className="bg-[#E9E6E1] w-full h-full mt-20 rounded-3xl p-6 relative">
           <View className="absolute top-[-50] left-[50%] translate-x-[-50%]">
             <View className="relative">
-              <Image
-                source={{ uri: imageUri }}
-                className="w-[100] h-[100] rounded-full border border-black"
-                resizeMode="cover"
-              />
+              {isUploading ? (
+                <View className="w-[100] h-[100] rounded-full border border-black items-center justify-center bg-white">
+                  <ActivityIndicator size="large" color="#000" />
+                </View>
+              ) : (
+                <Image
+                  source={{ uri: imageUri }}
+                  className="w-[100] h-[100] rounded-full border border-black"
+                  resizeMode="cover"
+                />
+              )}
+
               <View className="w-[35] h-[35] bg-white rounded-full border border-black absolute bottom-0 right-[-5] flex items-center justify-center">
-                <TouchableOpacity onPress={updateProfileImage}>
+                <TouchableOpacity
+                  onPress={isUploading ? undefined : updateProfileImage}
+                  disabled={isUploading}
+                >
                   <Entypo name="camera" size={20} color="black" />
                 </TouchableOpacity>
               </View>

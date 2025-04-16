@@ -1,14 +1,8 @@
-import {
-  View,
-  Text,
-  TextInput,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, TextInput, Image, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { loginImage } from "../../utils/loginImage";
 import { useRouter } from "expo-router";
-import { useAuthStore } from "@/store/authStore"; // Assuming useAuth provides a signIn function
+import { useAuthStore } from "@/store/authStore";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 const login = () => {
@@ -19,24 +13,33 @@ const login = () => {
     email: string;
     password: string;
   }
+
   const [userData, setUserData] = useState<User>({
     email: "",
     password: "",
   });
 
-  const router = useRouter(); // Use the router from expo-router
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const router = useRouter();
+
   const handleLogin = async (userData: User) => {
-    if (!userData) {
-      console.log("No user data provided");
+    if (!userData.email || !userData.password) {
+      setErrorMsg("กรุณากรอกอีเมลและรหัสผ่าน");
       return;
     }
 
-    await login(userData.email, userData.password);
+    try {
+      setErrorMsg(""); // ล้าง error ก่อน
+      await login(userData.email, userData.password);
+    } catch (err: any) {
+      setErrorMsg(err.message);
+    }
   };
 
   useEffect(() => {
     if (user) {
-      router.push("/(tabs)");
+      router.push("/(tabs)/home");
     }
   }, [user]);
 
@@ -57,6 +60,7 @@ const login = () => {
         className="w-full h-40 absolute bottom-0 z-20"
         resizeMode="cover"
       />
+
       <View className="absolute top-14 left-6 z-30">
         <TouchableOpacity
           onPress={() => router.push("/(tabs)")}
@@ -70,22 +74,23 @@ const login = () => {
       <View className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
         <View className="bg-primary w-[370] h-[512] rounded-2xl flex flex-col items-center justify-around">
           <View className="mt-10 p-1 flex items-center justify-center">
-            <View>
-              <Text className="text-white font-Prompt text-6xl text-center ">
-                เข้าสู่ระบบ
-              </Text>
-            </View>
+            <Text className="text-white font-Prompt text-6xl text-center">
+              เข้าสู่ระบบ
+            </Text>
           </View>
+
           <View className="gap-8">
-            <View className="relative w-[300] h-[60] ">
+            <View className="relative w-[300] h-[60]">
               <TextInput
                 placeholder="อีเมล"
                 className="w-full h-full bg-white mb-4 rounded-full text-2xl font-Prompt pl-20"
                 onChangeText={(text) =>
                   setUserData({ ...userData, email: text })
                 }
+                keyboardType="email-address"
+                autoCapitalize="none"
               />
-              <View className=" absolute top-1/2 -translate-y-1/2 left-1  bg-secondary h-[50] w-[50] rounded-full flex items-center justify-center">
+              <View className="absolute top-1/2 -translate-y-1/2 left-1 bg-secondary h-[50] w-[50] rounded-full flex items-center justify-center">
                 <Image
                   source={{ uri: loginImage[0] }}
                   className="w-[32] h-[32]"
@@ -93,16 +98,17 @@ const login = () => {
                 />
               </View>
             </View>
+
             <View className="relative w-[300] h-[60]">
               <TextInput
                 placeholder="รหัสผ่าน"
                 className="w-full h-full bg-white mb-4 rounded-full text-2xl font-Prompt pl-20"
-                secureTextEntry={true}
+                secureTextEntry
                 onChangeText={(text) =>
                   setUserData({ ...userData, password: text })
                 }
               />
-              <View className=" absolute top-1/2 -translate-y-1/2 left-1  bg-secondary h-[50] w-[50] rounded-full flex items-center justify-center">
+              <View className="absolute top-1/2 -translate-y-1/2 left-1 bg-secondary h-[50] w-[50] rounded-full flex items-center justify-center">
                 <Image
                   source={{ uri: loginImage[1] }}
                   className="w-[32] h-[32]"
@@ -111,6 +117,13 @@ const login = () => {
               </View>
             </View>
           </View>
+
+          {errorMsg ? (
+            <Text className="text-red-500 font-Prompt text-center px-5 mt-2">
+              {errorMsg}
+            </Text>
+          ) : null}
+
           <View>
             <TouchableOpacity
               className="bg-secondary p-5 rounded-full w-[200] h-[60] flex items-center justify-center"
@@ -120,7 +133,8 @@ const login = () => {
                 เข้าสู่ระบบ
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push("/(screen)/register")}>
+
+            <TouchableOpacity>
               <Text className="text-white font-Prompt text-xl underline text-center mt-8">
                 ยังไม่ได้เป็นสมาชิก ?
               </Text>

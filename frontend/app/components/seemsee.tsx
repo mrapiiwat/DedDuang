@@ -1,50 +1,96 @@
-import { ScrollView, Image, Text, View, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  Image,
+  Text,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState } from "react";
 import { useAuthStore } from "@/store/authStore";
-import { zodiacSign } from "@/utils/zodi";
+import Constants from "expo-constants";
+import axios from "axios";
+import { mockData } from "../../utils/seemsee";
+
+const API_URL = Constants.expoConfig?.extra?.API_URL;
+
+interface TarotProps {
+  name: string;
+  image: string;
+  description: string;
+}
 
 const Seemsee = () => {
   const user = useAuthStore((state) => state.user);
-  const refreshUser = useAuthStore((state) => state.refreshUser);
-  const [Zodiac, setZodiac] = useState<string>("");
-
-  refreshUser();
+  const [tarot, setTarot] = useState<TarotProps>();
+  const [count, setCount] = useState<number>(0);
+  const [card, setCard] = useState<TarotProps[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!user) {
     alert("กรุณาเข้าสู่ระบบก่อน");
     return null;
   }
-  const { dateOfBirth, timeOfBirth } = user;
 
-  const date = new Date(dateOfBirth);
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
+  const handleRandomPress = async () => {
+    try {
+      if (count === 1) {
+        alert("สามารถเขย่าได้อีกครั้งภายหลัง");
+        return;
+      }
 
-  zodiacSign(month, day);
-
-  const mockData = {
-    image:
-      "https://s3-alpha-sig.figma.com/img/ff36/c125/5c125983d48b4b985cf647d75fcaed4e?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=amy8Vy~fAXMrJriiAlzEm6IGeZzViAfjNIlydccqEf5MhLIVAkOLGd2kZPMx1Bo0sO7r7LECOuzLHq1GYzOwHBnDlvzrkF9rAwxFbx2-jC0yPgdSBC5TS6zQ2sX~lUceG36FoXADXpntdnyA9~VVPv4~shXjvDzcSE1RQWduN3bdBk1Fd3d4UXmBeVo6Rmb7Y2SKqzIVBzfPRaYh9rLwracRYxhuvRKW~QS3eQM7sPyJNLFltUCcqCxGLhJciXssmdXAi-Z2NjKTok5pKuIvwRKx5mo2OTtHJnClzC7Zy9LaosCGdW2cRaNig4uoxXTUF35CWEnz~qbMCzhA6HpK-g__",
-    text: "ปีชง คือปีที่ได้รับผลกระทบมากที่สุด ถือว่าจะประสบกับเคราะห์หามยามร้ายค่อนข้างหนัก ธุรกิจการเงิน การงาน โชคลาภ การลงทุนด้านต่างๆ รวมไปถึงเรื่องความรัก คู่ครองคนรัก สุขภาพต้องระวัง มีแนวโน้มเกิดความผิดพลาดมากมาย",
+      setIsLoading(true);
+      const randomnum = Math.floor(Math.random() * (34 - 13 + 1)) + 13;
+      const response = await axios.get(`${API_URL}/item/${randomnum}`);
+      setCount((prev) => prev + 1);
+      setTarot(response.data.data);
+      setCard((prevCards) => [...prevCards, response.data.data]);
+    } catch (error) {
+      console.error("Error fetching tarot data:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <View className="flex justify-center items-center mt-10">
-      <Image
-        source={{
-          uri: mockData.image,
-        }}
-        style={{ width: 199, height: 199 }}
-        resizeMode="contain"
-      />
-      <TouchableOpacity className="bg-primary rounded-full w-40 py-2 my-5 ">
+      {isLoading ? (
+        <View className="w-[199] h-[199] flex items-center justify-center">
+          <ActivityIndicator size="large" color="#000" />
+          <Text className="mt-2 font-Prompt text-gray-500">กำลังเขย่า...</Text>
+        </View>
+      ) : (
+        <Image
+          source={{ uri: tarot?.image || mockData.image }}
+          style={{ width: 199, height: 199 }}
+          resizeMode="contain"
+        />
+      )}
+
+      <TouchableOpacity
+        onPress={handleRandomPress}
+        className={
+          count === 1
+            ? "bg-[#E9E6E1] rounded-full w-40 py-2 my-5"
+            : "bg-primary rounded-full w-40 py-2 my-5"
+        }
+        disabled={isLoading}
+      >
         <Text className="text-3xl font-bold text-white text-center">
-        เขย่า
+          {count === 3 ? "เสร็จสิ้น" : "เขย่า"}
         </Text>
       </TouchableOpacity>
+
+      <Text className="text-sm mb-4 text-gray-400 font-Prompt">
+        {count === 1 ? "สามารถเขย่าได้อีกครั้งภายหลัง" : "กดเพื่อเขย่าเซียมซี"}
+      </Text>
+
       <ScrollView className="bg-[##E9E6E1] p-10 rounded-t-[50] w-full h-[80%] ">
+        <Text className="text-3xl font-Prompt text-center mb-5">
+          {tarot?.name}
+        </Text>
         <Text className="text-lg font-Prompt text-center mb-5">
-          {mockData.text}
+          {tarot?.description || mockData.text}
         </Text>
       </ScrollView>
     </View>

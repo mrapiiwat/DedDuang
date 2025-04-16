@@ -4,9 +4,7 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
-  Platform,
   Keyboard,
   Alert,
 } from "react-native";
@@ -15,6 +13,10 @@ import { useRouter } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Checkbox } from "react-native-paper";
+import axios from "axios";
+import Constants from "expo-constants";
+
+const API_URL = Constants.expoConfig?.extra?.API_URL;
 
 const Register = () => {
   const router = useRouter();
@@ -33,21 +35,25 @@ const Register = () => {
     }
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!email || !password || !sex || !isDateSelected) {
       alert("กรุณากรอกข้อมูลให้ครบถ้วน");
       return;
     }
 
-    Alert.alert(
-      "Registration Successful",
-      "You have successfully registered! \n" +
-        email +
-        "\n" +
-        password +
-        "\n" +
-        dateOfBirth
-    );
+    const DateOfBirth = dateOfBirth.toISOString().split("T")[0];
+
+    const data = {
+      email,
+      password,
+      dateOfBirth: DateOfBirth.toString(),
+      sex,
+    };
+
+    await axios.post(`${API_URL}/register`, data);
+
+    alert("สมัครสมาชิกสำเร็จ");
+    router.push("/(screen)/login");
   };
 
   return (
