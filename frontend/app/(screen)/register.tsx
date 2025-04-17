@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
@@ -26,6 +25,7 @@ const Register = () => {
   const [isDateSelected, setIsDateSelected] = useState(false);
   const [sex, setSex] = useState<string>();
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleDateConfirm = (event: any, selectedDate?: Date) => {
     if (selectedDate) {
@@ -37,23 +37,33 @@ const Register = () => {
 
   const handleConfirm = async () => {
     if (!email || !password || !sex || !isDateSelected) {
-      alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+      setErrorMsg("กรุณากรอกข้อมูลให้ครบถ้วน");
       return;
     }
 
-    const DateOfBirth = dateOfBirth.toISOString().split("T")[0];
+    try {
+      setErrorMsg(""); // clear error ก่อน
 
-    const data = {
-      email,
-      password,
-      dateOfBirth: DateOfBirth.toString(),
-      sex,
-    };
+      const DateOfBirth = dateOfBirth.toISOString().split("T")[0];
 
-    await axios.post(`${API_URL}/register`, data);
+      const data = {
+        email,
+        password,
+        dateOfBirth: DateOfBirth.toString(),
+        sex,
+      };
 
-    alert("สมัครสมาชิกสำเร็จ");
-    router.push("/(screen)/login");
+      await axios.post(`${API_URL}/register`, data);
+
+      alert("สมัครสมาชิกสำเร็จ");
+      router.push("/(screen)/login");
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "เกิดข้อผิดพลาดในการสมัครสมาชิก";
+      setErrorMsg(msg);
+    }
   };
 
   return (
@@ -158,6 +168,13 @@ const Register = () => {
               </Text>
             </View>
           </View>
+
+          {/* แสดงข้อความ error ถ้ามี */}
+          {errorMsg ? (
+            <Text className="text-red-500 font-Prompt text-center text-xl px-4">
+              {errorMsg}
+            </Text>
+          ) : null}
 
           <View className="mt-3 items-center gap-4">
             <TouchableOpacity

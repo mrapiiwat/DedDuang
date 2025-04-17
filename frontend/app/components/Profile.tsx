@@ -25,7 +25,9 @@ const Profile: React.FC = () => {
         source={{
           uri:
             ImgageUri == null
-              ? "https://avatar.iran.liara.run/public/boy?username=Ash"
+              ? data?.sex === "ชาย"
+                ? "https://avatar.iran.liara.run/public/boy?username=Ash"
+                : "https://avatar.iran.liara.run/public/92"
               : ImgageUri,
         }}
         className="w-[75] h-[75] rounded-full border border-black"

@@ -15,3 +15,9 @@ export const imageOption = [
   "https://s3-alpha-sig.figma.com/img/7098/4baa/1f2dabc22274f79e135dac9d45020784?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=BqoLMIfTLisI-3YGhn8S5QQhqc2K26qFFztZMqVDNGISHTI1fFWJ975r4TOjjgaSBjNXuqaTMqW57cZ-PNzzTRFrICx5hSu6hSy~uo-WqOiC~tqjWLFVFRoAWOfhpTotsBwM5YZlmoNOsY4dZpeYPaU8uBhafMTok6eotasUQv1vOhkCgA3j8FLwdGTXzehqHiq5PukWqF~SQejXzSyLqDWm9xk-6mVo5uvL94g6flLN15hB6JzTSmnS6TIOIe89TWgFXxYlzsVxM3TYHwS6h6Pmi3j8DpeMPuM3xwonDt5~KTF~o9O4S8DE5Jg-hmuVb8S8MXdET0dpboQK9Cv6Vw__",
   "https://s3-alpha-sig.figma.com/img/2547/43cd/99c39e2436a92f6378bd59ebcd32e0be?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=kQaq-wSmyT8V0lUDZqggALpm5eViUMBHOnW4H1nBuKBOpRHIVkYUhcnMg6HqeBh7MKHXUMAis9NkKYUohWZu7xuLRE13oU027QoJAYBFRWV5p7co01ChVABzcO46~ftNEJV3v-pygXpaCJu7evm8V1laBCzrNkjGQfUPqdgDUSKOaaAyo~jVW0djY29TKVqDMERT0XwpXDQssMmrW8I4xB-n-q4HD9-~W9wkP~-4cf0qjjcfLeUsYqdzq6lB39L6mNYKlTEa3uOoJAsdOo9mqdkKlyCrYNavn72NuevLLsdWfeg3zTZvhQs62-mpsu6cMWsXp7P5fb7fCMwhsyy7Tg__",
 ];
+
+export const mockData = {
+  image:
+    "https://s3-alpha-sig.figma.com/img/e416/0d93/75f22f0b9112f79dc7efae0f9dc2206a?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=enAxe~07y3O2lUfIsHw~Gw5eRu0TlQHY680RQtrcUs8-Uou3fgOzYA6HPW1MUo3jjPbO96sOsDaw834-DAvfFMY6OapwN-KvsRUslCXdZNWfH7j42vx4comQnrSY3oC2meeP2VM~IUDXej3pwqQtnV1~1Yt5OaABgnaMvuCRdsGJsIgZNHuNdtrwjEeq454mEOwALUksKhtnLRxjQea0WqwAsjgOaYhCbjFAU8D-Kd1WfXzQp7NCppfOl~mQRcZgj~dmN-6xmiifFRNBcPLq2sowbV695Xwt4aPSVkbCuAZEpLz5WqqkFLskAaKQiun7fuOQdQ-UO8JfJBa3Lk60Lg__",
+  text: "กดปุ่มด้านบนเพื่อสุ่มไพ่ทาโรต์",
+};

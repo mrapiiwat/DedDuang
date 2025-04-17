@@ -119,7 +119,14 @@ const EditProfileScreen = () => {
                 </View>
               ) : (
                 <Image
-                  source={{ uri: imageUri }}
+                  source={{
+                    uri:
+                      imageUri == null
+                        ? user?.sex === "ชาย"
+                          ? "https://avatar.iran.liara.run/public/boy?username=Ash"
+                          : "https://avatar.iran.liara.run/public/92"
+                        : imageUri,
+                  }}
                   className="w-[100] h-[100] rounded-full border border-black"
                   resizeMode="cover"
                 />

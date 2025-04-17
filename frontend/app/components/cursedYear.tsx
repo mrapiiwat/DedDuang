@@ -1,48 +1,145 @@
-import { ScrollView, Image, Text, View } from "react-native";
-import React, { useState } from "react";
+import { ScrollView, Image, Text, View, ActivityIndicator } from "react-native";
+import React, { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/authStore";
-import { zodiacSign } from "@/utils/zodi";
-import name from "../(screen)/[name]";
+import Constants from "expo-constants";
+import axios from "axios";
+import { useRouter } from "expo-router";
+
+const API_URL = Constants.expoConfig?.extra?.API_URL;
+
+interface CursedData {
+  name: string;
+  image: string;
+  description: string;
+  cursedPercent: number;
+}
+
+const zodiacList = [
+  "ชวด", "ฉลู", "ขาล", "เถาะ", "มะโรง", "มะเส็ง",
+  "มะเมีย", "มะแม", "วอก", "ระกา", "จอ", "กุน",
+] as const;
+
+type Zodiac = typeof zodiacList[number];
+
+const zodiacIdMap: Record<string, number> = {
+  ชวด: 64,
+  ฉลู: 65,
+  ขาล: 66,
+  เถาะ: 67,
+  มะโรง: 68,
+  มะเส็ง: 69,
+  มะเมีย: 70,
+  มะแม: 71,
+  วอก: 72,
+  ระกา: 73,
+  จอ: 74,
+  กุน: 63,
+};
+
+const baseYear = 2020; // 2020 คือปีชวด
 
 const CursedYear = () => {
+  const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const refreshUser = useAuthStore((state) => state.refreshUser);
-  const [Zodiac, setZodiac] = useState<string>("");
-
-  refreshUser();
+  const [zodiac, setZodiac] = useState<CursedData>();
+  const [isLoading, setIsLoading] = useState(true);
 
   if (!user) {
     alert("กรุณาเข้าสู่ระบบก่อน");
     return null;
   }
-  const { dateOfBirth, timeOfBirth } = user;
 
-  const date = new Date(dateOfBirth);
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
+  if (!user.dateOfBirth) {
+    alert("กรุณาเพิ่มวันเกิดก่อน");
+    return router.push("/(screen)/editProfile");
+  }
 
-  zodiacSign(month, day);
-
-  const mockData = {
-    name: "ปีกุน",
-    image:
-      "https://s3-alpha-sig.figma.com/img/10cd/91af/d8d1a781cf5226398720d66c281c680a?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=NGf88EYvJyi~yX6xHzCYcKaVbg0EUfFrfhTBKBiBqOWOYoWZAaK1yve3DuorCn4Szfu06SCJt7SxeQQiDRIUaJovySEh7m3gahZysKFXFi5ePV0wILtb2sPLpQ1T88tLwzEBdKa20~DpIS9TYswYJm4QwOEmB1XjSjj4yWdSv0mkSPByPONLZyFDzqVyheFOZtLuOE2O4CI480IQKu2X3X79fJLmo~sT12zGCGcD69QRJSfH-qG6gZhAQwGoBjCZ0mE2P0QvL4XVPrg2LzdfOjbxfoiO164TOe9T0Ds5WdqtEILHMpHwJQ9fb5PfEZpTzV9XIgUgN68B4M6aeo9IRQ__",
-    text: "ปีชง คือปีที่ได้รับผลกระทบมากที่สุด ถือว่าจะประสบกับเคราะห์หามยามร้ายค่อนข้างหนัก ธุรกิจการเงิน การงาน โชคลาภ การลงทุนด้านต่างๆ รวมไปถึงเรื่องความรัก คู่ครองคนรัก สุขภาพต้องระวัง มีแนวโน้มเกิดความผิดพลาดมากมาย",
+  const getZodiacFromYear = (year: number) => {
+    const index = (year - baseYear) % 12;
+    return zodiacList[(index + 12) % 12]; 
   };
+
+  // คำนวณเปอร์เซ็นต์ชงแบบยืดหยุ่น
+  const getCursedPercentage = (userZodiac: Zodiac, currentZodiac: Zodiac): number => {
+    if (userZodiac === currentZodiac) return 100;
+
+    const zodiacIndex = zodiacList.indexOf(currentZodiac);
+    const oppositeIndex = (zodiacIndex + 6) % 12;
+    const mildIndex1 = (zodiacIndex + 4) % 12;
+    const mildIndex2 = (zodiacIndex + 8) % 12;
+
+    const opposite = zodiacList[oppositeIndex]; // ชงหลัก 100%
+    const mild1 = zodiacList[mildIndex1]; // ชงรอง 75%
+    const mild2 = zodiacList[mildIndex2]; // ชงรอง 50%
+
+    if (userZodiac === opposite) return 100;
+    if (userZodiac === mild1) return 75;
+    if (userZodiac === mild2) return 50;
+
+    return 10; // อย่างน้อยมีดวงชงเล็กน้อย
+  };
+
+  const fetchZodiac = async () => {
+    try {
+      if (!API_URL) throw new Error("API_URL is not defined");
+
+      const birthYear = new Date(user.dateOfBirth).getFullYear();
+      const userZodiac = getZodiacFromYear(birthYear);
+
+      const currentYear = new Date().getFullYear();
+      const currentZodiac = getZodiacFromYear(currentYear);
+
+      const cursedPercent = getCursedPercentage(userZodiac, currentZodiac);
+
+      const zodiacId = zodiacIdMap[userZodiac];
+      if (!zodiacId) throw new Error("ไม่พบ ID สำหรับปี " + userZodiac);
+
+      const res = await axios.get(`${API_URL}/item/${zodiacId}`);
+      const data = res.data.data;
+
+      setZodiac({
+        name: userZodiac,
+        image: data.image,
+        description: data.description,
+        cursedPercent,
+      });
+    } catch (error) {
+      console.error("Error fetching cursed zodiac:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    refreshUser();
+    fetchZodiac();
+  }, []);
 
   return (
     <View className="flex justify-center items-center mt-10">
-      <Image
-        source={{
-          uri: mockData.image,
-        }}
-        style={{ width: 199, height: 199 }}
-        resizeMode="contain"
-      />
-      <Text className="my-10 text-4xl font-bold">{mockData.name}</Text>
-      <ScrollView className="bg-[##E9E6E1] p-10 rounded-t-[50] w-full h-[80%] ">
+      {isLoading ? (
+        <View className="w-[199] h-[199] flex items-center justify-center">
+          <ActivityIndicator size="large" color="#000" />
+          <Text className="mt-2 font-Prompt text-gray-500">กำลังโหลด...</Text>
+        </View>
+      ) : (
+        <>
+          <Image
+            source={{ uri: zodiac?.image }}
+            style={{ width: 199, height: 199 }}
+            resizeMode="contain"
+          />
+          <Text className="mt-5 mb-3 text-4xl font-PromptMedium">ปี{zodiac?.name}</Text>
+          <Text className="text-lg text-red-500 font-Prompt mb-3">
+            ปีนี้ชง {zodiac?.cursedPercent}%
+          </Text>
+        </>
+      )}
+
+      <ScrollView className="bg-[#E9E6E1] p-10 rounded-t-[50] w-full h-[80%]">
         <Text className="text-lg font-Prompt text-center mb-5">
-          {mockData.text}
+          {zodiac?.description}
         </Text>
       </ScrollView>
     </View>

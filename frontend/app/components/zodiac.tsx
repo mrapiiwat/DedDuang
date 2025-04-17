@@ -69,7 +69,7 @@ const Zodiac = () => {
             style={{ width: 199, height: 199 }}
             resizeMode="contain"
           />
-          <Text className="my-10 text-4xl font-bold">{Zodiac?.name}</Text>
+          <Text className="my-10 text-3xl font-bold font-Prompt">{Zodiac?.name}</Text>
         </>
       )}
 

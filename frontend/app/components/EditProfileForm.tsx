@@ -23,10 +23,24 @@ const EditProfileForm: React.FC = () => {
   const [dateOfBirth, setDateOfBirth] = useState(
     new Date(user?.dateOfBirth ? user.dateOfBirth : new Date())
   );
-  const [timeOfBirth, setTimeOfBirth] = useState(new Date());
+
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [unknownTime, setUnknownTime] = useState(user?.timeOfBirth == null ? true : false);
+  const isValidDate = (dateString: any) => {
+    const date = new Date(dateString);
+    return !isNaN(date.getTime());
+  };
+
+  const initialTimeOfBirth =
+    user?.timeOfBirth && isValidDate(user.timeOfBirth)
+      ? new Date(user.timeOfBirth.toString())
+      : new Date();
+
+  const [unknownTime, setUnknownTime] = useState(
+    !user?.timeOfBirth || !isValidDate(user.timeOfBirth)
+  );
+
+  const [timeOfBirth, setTimeOfBirth] = useState<Date>(initialTimeOfBirth);
   const [sex, setSex] = useState<string>(user?.sex === "ชาย" ? "ชาย" : "หญิง");
   const [status, setStatus] = useState<string>(
     user?.status === "โสด" ? "โสด" : "มีคู่"
@@ -53,6 +67,7 @@ const EditProfileForm: React.FC = () => {
       const trimID = user?.id?.trim();
 
       const formattedDateOfBirth = dateOfBirth.toISOString().split("T")[0];
+      console.log(unknownTime, timeOfBirth);
 
       await axios.put(`${API_URL}/user/${trimID}`, {
         name: name,

@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { useAuthStore } from "@/store/authStore";
 import Constants from "expo-constants";
 import axios from "axios";
+import { mockData } from "../../utils/option";
 
 const API_URL = Constants.expoConfig?.extra?.API_URL;
 
@@ -33,7 +34,10 @@ const Tarot = () => {
   }
 
   if (count === 3) {
-    Alert.alert('การ์ดที่ได้',`\n ${card.map((item) => item.name).join("\n ")}`);
+    Alert.alert(
+      "การ์ดที่ได้",
+      `\n ${card.map((item) => item.name).join("\n ")}`
+    );
   }
 
   const handleRandomPress = async () => {
@@ -56,18 +60,14 @@ const Tarot = () => {
     }
   };
 
-  const mockData = {
-    image:
-      "https://s3-alpha-sig.figma.com/img/e416/0d93/75f22f0b9112f79dc7efae0f9dc2206a?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=enAxe~07y3O2lUfIsHw~Gw5eRu0TlQHY680RQtrcUs8-Uou3fgOzYA6HPW1MUo3jjPbO96sOsDaw834-DAvfFMY6OapwN-KvsRUslCXdZNWfH7j42vx4comQnrSY3oC2meeP2VM~IUDXej3pwqQtnV1~1Yt5OaABgnaMvuCRdsGJsIgZNHuNdtrwjEeq454mEOwALUksKhtnLRxjQea0WqwAsjgOaYhCbjFAU8D-Kd1WfXzQp7NCppfOl~mQRcZgj~dmN-6xmiifFRNBcPLq2sowbV695Xwt4aPSVkbCuAZEpLz5WqqkFLskAaKQiun7fuOQdQ-UO8JfJBa3Lk60Lg__",
-    text: "กดปุ่มด้านบนเพื่อสุ่มไพ่ทาโรต์",
-  };
-
   return (
     <View className="flex justify-center items-center mt-10">
       {isLoading ? (
         <View className="w-[199] h-[199] flex items-center justify-center">
           <ActivityIndicator size="large" color="#000" />
-          <Text className="mt-2 font-Prompt text-gray-500">กำลังสุ่มไพ่...</Text>
+          <Text className="mt-2 font-Prompt text-gray-500">
+            กำลังสุ่มไพ่...
+          </Text>
         </View>
       ) : (
         <Image

@@ -14,7 +14,7 @@ import { mockData } from "../../utils/seemsee";
 
 const API_URL = Constants.expoConfig?.extra?.API_URL;
 
-interface TarotProps {
+interface SeemseeProps {
   name: string;
   image: string;
   description: string;
@@ -22,9 +22,8 @@ interface TarotProps {
 
 const Seemsee = () => {
   const user = useAuthStore((state) => state.user);
-  const [tarot, setTarot] = useState<TarotProps>();
+  const [seemsee, setSeemsee] = useState<SeemseeProps>();
   const [count, setCount] = useState<number>(0);
-  const [card, setCard] = useState<TarotProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   if (!user) {
@@ -40,11 +39,10 @@ const Seemsee = () => {
       }
 
       setIsLoading(true);
-      const randomnum = Math.floor(Math.random() * (34 - 13 + 1)) + 13;
+      const randomnum = Math.floor(Math.random() * (62 - 35 + 1)) + 35;
       const response = await axios.get(`${API_URL}/item/${randomnum}`);
       setCount((prev) => prev + 1);
-      setTarot(response.data.data);
-      setCard((prevCards) => [...prevCards, response.data.data]);
+      setSeemsee(response.data.data);
     } catch (error) {
       console.error("Error fetching tarot data:", error);
     } finally {
@@ -61,7 +59,7 @@ const Seemsee = () => {
         </View>
       ) : (
         <Image
-          source={{ uri: tarot?.image || mockData.image }}
+          source={{ uri: seemsee?.image || mockData.image }}
           style={{ width: 199, height: 199 }}
           resizeMode="contain"
         />
@@ -86,11 +84,11 @@ const Seemsee = () => {
       </Text>
 
       <ScrollView className="bg-[##E9E6E1] p-10 rounded-t-[50] w-full h-[80%] ">
-        <Text className="text-3xl font-Prompt text-center mb-5">
-          {tarot?.name}
+        <Text className="text-2xl font-Prompt text-center mb-5">
+          {seemsee?.name}
         </Text>
         <Text className="text-lg font-Prompt text-center mb-5">
-          {tarot?.description || mockData.text}
+          {seemsee?.description || mockData.text}
         </Text>
       </ScrollView>
     </View>

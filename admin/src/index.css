@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@font-face {
+  font-family: Prompt ;
+  src: url("../src/assets/fonts/Prompt-Light.ttf");
+}

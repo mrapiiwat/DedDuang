@@ -3,11 +3,11 @@ import React from "react";
 import { useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
-import Zodiac from "../components/zodiac";
 import CursedYear from "../components/cursedYear";
 import Tarot from "../components/tarot";
 import Seemsee from "../components/seemsee";
 import About from "../components/about";
+import Zodiac from "../components/zodiac";
 
 const name = () => {
   const { name } = useLocalSearchParams();
@@ -25,6 +25,7 @@ const name = () => {
         </TouchableOpacity>
       </View>
       {name === "ดูฤกษ์ราศี" ? (
+        //@ts-ignore
         <Zodiac />
       ) : name === "ดูปีชง" ? (
         <CursedYear />

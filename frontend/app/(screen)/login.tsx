@@ -74,7 +74,7 @@ const login = () => {
       <View className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
         <View className="bg-primary w-[370] h-[512] rounded-2xl flex flex-col items-center justify-around">
           <View className="mt-10 p-1 flex items-center justify-center">
-            <Text className="text-white font-Prompt text-6xl text-center">
+            <Text className="text-white text-6xl font-Prompt font-bold">
               เข้าสู่ระบบ
             </Text>
           </View>
@@ -134,7 +134,7 @@ const login = () => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/(screen)/register")}>
               <Text className="text-white font-Prompt text-xl underline text-center mt-8">
                 ยังไม่ได้เป็นสมาชิก ?
               </Text>
