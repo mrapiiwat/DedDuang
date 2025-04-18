@@ -2,6 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "../components/Modal";
 import { toast } from "react-toastify";
+import {
+  BASE_URL,
+  CATEGORY,
+  CREATE_ITEM,
+  UPDATE_ITEM,
+  DELETE_ITEM,
+  CATEGORY_TAROT_ID,
+} from "../api/endpoint.api";
 
 interface TarotItem {
   id: number;
@@ -21,18 +29,17 @@ const Tarot: React.FC = () => {
     name: "",
     description: "",
     image: "",
-    categoryId: "23835c08-883d-4672-828c-1cdd2540d0fc", // ID สำหรับไพ่ทาโร่
+    categoryId: CATEGORY_TAROT_ID,
   });
 
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get(
-        "http://localhost:5000/api/category/23835c08-883d-4672-828c-1cdd2540d0fc"
-      );
+      const res = await axios.get(`${BASE_URL}${CATEGORY}${CATEGORY_TAROT_ID}`);
       setItems(res.data.data.Items);
     } catch (err) {
-      toast.error("โหลดข้อมูลไม่สำเร็จ");
+      const error = err as { response: { data: { message: string } } };
+      toast.error(error.response.data.message || "ไม่สามารถโหลดข้อมูลได้");
     } finally {
       setIsLoading(false);
     }
@@ -47,7 +54,7 @@ const Tarot: React.FC = () => {
       name: "",
       description: "",
       image: "",
-      categoryId: "23835c08-883d-4672-828c-1cdd2540d0fc",
+      categoryId: CATEGORY_TAROT_ID,
     });
     setSelectedItem(null);
     setIsEditing(false);
@@ -69,31 +76,37 @@ const Tarot: React.FC = () => {
   const handleDelete = async () => {
     if (!selectedItem) return;
     try {
-      await axios.delete(`http://localhost:5000/api/tarots/${selectedItem.id}`);
-      toast.success("ลบสำเร็จ");
+      const res = await axios.delete(
+        `${BASE_URL}${DELETE_ITEM}${selectedItem.id}`
+      );
+
+      toast.success(res.data.message || "ลบเรียบร้อย");
       fetchData();
       setIsModalOpen(false);
-    } catch {
-      toast.error("ลบไม่สำเร็จ");
+    } catch (err) {
+      const error = err as { response: { data: { message: string } } };
+      toast.error(error.response.data.message || "ไม่สามารถลบข้อมูลได้");
     }
   };
 
   const handleSubmit = async () => {
     try {
       if (isEditing && selectedItem) {
-        await axios.put(
-          `http://localhost:5000/api/tarots/${selectedItem.id}`,
+        const res = await axios.put(
+          `${BASE_URL}${UPDATE_ITEM}${selectedItem.id}`,
           formData
         );
-        toast.success("อัปเดตเรียบร้อย");
+
+        toast.success(res.data.message || "แก้ไขเรียบร้อย");
       } else {
-        await axios.post("http://localhost:5000/api/tarots", formData);
-        toast.success("เพิ่มข้อมูลเรียบร้อย");
+        const res = await axios.post(`${BASE_URL}${CREATE_ITEM}`, formData);
+        toast.success(res.data.message || "เพิ่มเรียบร้อย");
       }
       fetchData();
       setIsModalOpen(false);
-    } catch {
-      toast.error("บันทึกไม่สำเร็จ");
+    } catch (err) {
+      const error = err as { response: { data: { message: string } } };
+      toast.error(error.response.data.message || "ไม่สามารถบันทึกข้อมูลได้");
     }
   };
 

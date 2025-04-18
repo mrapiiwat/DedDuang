@@ -2,6 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "../components/Modal";
 import { toast } from "react-toastify";
+import {
+  BASE_URL,
+  CATEGORY,
+  CREATE_ITEM,
+  UPDATE_ITEM,
+  DELETE_ITEM,
+  CATEGORY_CURSED_ID,
+} from "../api/endpoint.api";
 
 interface CursedYearItem {
   id: number;
@@ -21,18 +29,16 @@ const CursedYear: React.FC = () => {
     name: "",
     description: "",
     image: "",
-    categoryId: "b596de94-876f-42f5-bfd0-09007aa11bfd",
+    categoryId: CATEGORY_CURSED_ID,
   });
 
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get(
-        "http://localhost:5000/api/category/b596de94-876f-42f5-bfd0-09007aa11bfd"
-      );
+      const res = await axios.get(`${BASE_URL}${CATEGORY}${CATEGORY_CURSED_ID}`);
       setItems(res.data.data.Items);
-    } catch (err) {
-      toast.error("โหลดข้อมูลไม่สำเร็จ");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "โหลดข้อมูลไม่สำเร็จ");
     } finally {
       setIsLoading(false);
     }
@@ -47,7 +53,7 @@ const CursedYear: React.FC = () => {
       name: "",
       description: "",
       image: "",
-      categoryId: "b596de94-876f-42f5-bfd0-09007aa11bfd",
+      categoryId: CATEGORY_CURSED_ID,
     });
     setSelectedItem(null);
     setIsEditing(false);
@@ -69,33 +75,28 @@ const CursedYear: React.FC = () => {
   const handleDelete = async () => {
     if (!selectedItem) return;
     try {
-      await axios.delete(
-        `http://localhost:5000/api/cursedyears/${selectedItem.id}`
-      );
+      await axios.delete(`${BASE_URL}${DELETE_ITEM}${selectedItem.id}`);
       toast.success("ลบสำเร็จ");
       fetchData();
       setIsModalOpen(false);
-    } catch {
-      toast.error("ลบไม่สำเร็จ");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "ลบไม่สำเร็จ");
     }
   };
 
   const handleSubmit = async () => {
     try {
       if (isEditing && selectedItem) {
-        await axios.put(
-          `http://localhost:5000/api/cursedyears/${selectedItem.id}`,
-          formData
-        );
+        await axios.put(`${BASE_URL}${UPDATE_ITEM}${selectedItem.id}`, formData);
         toast.success("อัปเดตเรียบร้อย");
       } else {
-        await axios.post("http://localhost:5000/api/cursedyears", formData);
+        await axios.post(`${BASE_URL}${CREATE_ITEM}`, formData);
         toast.success("เพิ่มข้อมูลเรียบร้อย");
       }
       fetchData();
       setIsModalOpen(false);
-    } catch {
-      toast.error("บันทึกไม่สำเร็จ");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "บันทึกไม่สำเร็จ");
     }
   };
 
@@ -157,9 +158,7 @@ const CursedYear: React.FC = () => {
             type="text"
             placeholder="ลิงก์รูปภาพ"
             value={formData.image}
-            onChange={(e) =>
-              setFormData({ ...formData, image: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
             className="w-full px-3 py-2 rounded border text-black"
           />
           <textarea

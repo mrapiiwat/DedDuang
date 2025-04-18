@@ -1,4 +1,11 @@
 import React, { useState, useEffect } from "react";
+import {
+  BASE_URL,
+  GET_NEWS_ALL,
+  CREATE_NEWS,
+  UPDATE_NEWS,
+  DELETE_NEWS,
+} from "../api/endpoint.api";
 import axios from "axios";
 import Modal from "../components/Modal";
 import { toast } from "react-toastify";
@@ -33,7 +40,7 @@ const Home: React.FC = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get("http://localhost:5000/api/news/all");
+      const response = await axios.get(`${BASE_URL}${GET_NEWS_ALL}`);
       setNews(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -50,7 +57,7 @@ const Home: React.FC = () => {
     e.preventDefault();
     try {
       setIsLoading(true);
-      await axios.post("http://localhost:5000/api/news", formData);
+      await axios.post(`${BASE_URL}${CREATE_NEWS}`, formData);
       toast.success("เพิ่มข่าวเรียบร้อยแล้ว", { position: "bottom-right" });
       fetchData();
       setFormData({ title: "", url: "", imageUrl: "" });
@@ -67,7 +74,7 @@ const Home: React.FC = () => {
     if (!selectedNews) return;
     try {
       setIsLoading(true);
-      await axios.put(`http://localhost:5000/api/news/${selectedNews.id}`, {
+      await axios.put(`${BASE_URL}${UPDATE_NEWS}${selectedNews.id}`, {
         title: formData.title,
         imageUrl: formData.imageUrl,
         linkUrl: formData.url,
@@ -89,7 +96,7 @@ const Home: React.FC = () => {
     if (!selectedNews) return;
     try {
       setIsLoading(true);
-      await axios.delete(`http://localhost:5000/api/news/${selectedNews.id}`);
+      await axios.delete(`${BASE_URL}${DELETE_NEWS}${selectedNews.id}`);
       toast.success("ลบข่าวเรียบร้อยแล้ว", { position: "bottom-right" });
       setIsModalOpen(false);
       fetchData();

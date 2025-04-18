@@ -2,6 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "../components/Modal";
 import { toast } from "react-toastify";
+import {
+  BASE_URL,
+  CATEGORY,
+  CREATE_ITEM,
+  UPDATE_ITEM,
+  DELETE_ITEM,
+  CATEGORY_ZODIAC_ID,
+} from "../api/endpoint.api";
 
 interface AuspiciousItem {
   id: number;
@@ -21,18 +29,19 @@ const Zodiac: React.FC = () => {
     name: "",
     description: "",
     image: "",
-    categoryId: "e62b08e2-4ae8-42de-a96f-2fef94eff5a0",
+    categoryId: CATEGORY_ZODIAC_ID,
   });
 
   const fetchData = async () => {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        "http://localhost:5000/api/category/e62b08e2-4ae8-42de-a96f-2fef94eff5a0"
+        `${BASE_URL}${CATEGORY}${CATEGORY_ZODIAC_ID}`
       );
       setItems(res.data.data.Items);
     } catch (err) {
-      toast.error("โหลดข้อมูลไม่สำเร็จ");
+      const error = err as { response: { data: { message: string } } };
+      toast.error(error.response.data.message || "ไม่สามารถโหลดข้อมูลได้");
     } finally {
       setIsLoading(false);
     }
@@ -47,7 +56,7 @@ const Zodiac: React.FC = () => {
       name: "",
       description: "",
       image: "",
-      categoryId: "e62b08e2-4ae8-42de-a96f-2fef94eff5a0",
+      categoryId: CATEGORY_ZODIAC_ID,
     });
     setSelectedItem(null);
     setIsEditing(false);
@@ -69,33 +78,36 @@ const Zodiac: React.FC = () => {
   const handleDelete = async () => {
     if (!selectedItem) return;
     try {
-      await axios.delete(
-        `http://localhost:5000/api/zodiacs/${selectedItem.id}`
+      const res = await axios.delete(
+        `${BASE_URL}${DELETE_ITEM}${selectedItem.id}`
       );
-      toast.success("ลบสำเร็จ");
+      toast.success(res.data.message);
       fetchData();
       setIsModalOpen(false);
-    } catch {
-      toast.error("ลบไม่สำเร็จ");
+    } catch (err) {
+      const error = err as { response: { data: { message: string } } };
+      toast.error(error.response.data.message || "ลบข้อมูลไม่สำเร็จ");
     }
   };
 
   const handleSubmit = async () => {
     try {
       if (isEditing && selectedItem) {
-        await axios.put(
-          `http://localhost:5000/api/zodiacs/${selectedItem.id}`,
+        const res = await axios.put(
+          `${BASE_URL}${UPDATE_ITEM}${selectedItem.id}`,
           formData
         );
-        toast.success("อัปเดตเรียบร้อย");
+
+        toast.success(res.data.message);
       } else {
-        await axios.post("http://localhost:5000/api/zodiacs", formData);
-        toast.success("เพิ่มข้อมูลเรียบร้อย");
+        const res = await axios.post(`${BASE_URL}${CREATE_ITEM}`, formData);
+        toast.success(res.data.message);
       }
       fetchData();
       setIsModalOpen(false);
-    } catch {
-      toast.error("บันทึกไม่สำเร็จ");
+    } catch (err) {
+      const error = err as { response: { data: { message: string } } };
+      toast.error(error.response.data.message || "บันทึกข้อมูลไม่สำเร็จ");
     }
   };
 
