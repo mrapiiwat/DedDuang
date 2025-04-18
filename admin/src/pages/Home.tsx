@@ -160,7 +160,7 @@ const Home: React.FC = () => {
       <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)}>
         <form
           onSubmit={handleSubmitAddNews}
-          className="p-5 space-y-4 bg-[#1A0040] rounded-lg mx-7"
+          className="p-5 space-y-4 bg-[#1A0040] rounded-lg"
         >
           <h1 className="text-2xl text-center text-[#D2B589] font-prompt font-extrabold">
             เพิ่มข่าวใหม่

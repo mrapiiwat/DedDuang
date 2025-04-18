@@ -257,4 +257,5 @@ router.put("/news/:id", authorizeAdmin, newsController.updateNews);
  *                     example: "Unauthorized"
  */
 
+
 export default router;

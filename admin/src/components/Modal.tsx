@@ -35,7 +35,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-lg py-7 transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all flex items-center justify-center">
+              <Dialog.Panel className="w-auto p-3 transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all flex items-center justify-center">
                 {children}
               </Dialog.Panel>
             </Transition.Child>

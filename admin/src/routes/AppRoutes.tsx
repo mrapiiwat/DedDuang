@@ -6,17 +6,22 @@ import Zodiac from "../pages/Zodiac";
 import CursedYear from "../pages/CursedYear";
 import Tarot from "../pages/Tarot";
 import Seemsee from "../pages/Seemsee";
+import Login from "../pages/auth/Login";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Login />,
+  },
+  {
+    path: "/admin",
     element: <Layout />,
     children: [
       { index: true, element: <Home /> },
-      { path: "/zodiac", element: <Zodiac /> },
-      { path: "/curse", element: <CursedYear /> },
-      { path: "/tarot", element: <Tarot /> },
-      { path: "/seemsee", element: <Seemsee /> },
+      { path: "zodiac", element: <Zodiac /> },
+      { path: "curse", element: <CursedYear /> },
+      { path: "tarot", element: <Tarot /> },
+      { path: "seemsee", element: <Seemsee /> },
     ],
   },
 ]);
