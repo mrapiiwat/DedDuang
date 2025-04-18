@@ -69,6 +69,35 @@ router.get("/news", newsController.getNews);
  *                     type: string
  *                     example: "Something went wrong"
  */
+router.get("/news/all", newsController.getAllnews);
+/**
+ * @swagger
+ * paths:
+ *   /api/news/all:
+ *     get:
+ *       summary: Get all news articles without pagination
+ *       description: Retrieves all news articles from the database without pagination.
+ *       tags: [News]
+ *       responses:
+ *         '200':
+ *           description: Successfully retrieved the list of news articles
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/News'
+ *         '500':
+ *           description: Internal server error
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: "Something went wrong"
+ */
 router.post("/news", authorizeAdmin, newsController.createNews);
 /**
  * @swagger
@@ -137,7 +166,7 @@ router.post("/news", authorizeAdmin, newsController.createNews);
  *                     type: string
  *                     example: "Something went wrong"
  */
-router.delete("/news", authorizeAdmin, newsController.deleteNews);
+router.delete("/news/:id", authorizeAdmin, newsController.deleteNews);
 /**
  * @swagger
  * paths:
@@ -186,6 +215,46 @@ router.delete("/news", authorizeAdmin, newsController.deleteNews);
  *                   message:
  *                     type: string
  *                     example: "Something went wrong"
+ */
+router.put("/news/:id", authorizeAdmin, newsController.updateNews);
+/**
+ * @swagger
+ * paths:
+ *   /api/news/{id}:
+ *     put:
+ *       summary: Update a news article
+ *       description: Updates an existing news article by ID.
+ *       tags: [News]
+ *       parameters:
+ *         - name: id
+ *           in: path
+ *           required: true
+ *           description: The ID of the news article to update
+ *           schema:
+ *             type: string
+ *         - name: News
+ *           in: body
+ *           required: true
+ *           description: The updated news article data
+ *           schema:
+ *             $ref: '#/components/schemas/News'
+ *       responses:
+ *         '200':
+ *           description: News article updated successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/News'
+ *         '401':
+ *           description: Unauthorized - Admin role is required
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     example: "Unauthorized"
  */
 
 export default router;

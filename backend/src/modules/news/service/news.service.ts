@@ -11,6 +11,14 @@ export const getNews = async (skip: number, limit: number) => {
   });
 };
 
+export const getAllNews = async () => {
+  return await prisma.news.findMany({
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+};
+
 export const createNews = async (data: News) => {
   return await prisma.news.create({
     data,
@@ -22,5 +30,14 @@ export const deleteNews = async (id: string) => {
     where: {
       id,
     },
+  });
+};
+
+export const updateNews = async (id: string, data: News) => {
+  return await prisma.news.update({
+    where: {
+      id,
+    },
+    data,
   });
 };

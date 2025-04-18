@@ -12,7 +12,7 @@ const SideBar: React.FC = () => {
     }`;
 
   return (
-    <div className="flex flex-col bg-[#1E1E1E] w-[300px] h-screen py-10 px-7 gap-24">
+    <div className="flex flex-col bg-[#1E1E1E] w-[300px] h-screen py-10 px-7 gap-20">
       <div className="flex flex-col gap-2">
         <div>
           <Link to="/" className={getLinkClass("/")}>

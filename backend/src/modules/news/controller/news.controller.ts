@@ -24,6 +24,23 @@ export const getNews = async (req: Request, res: Response) => {
   }
 };
 
+export const getAllnews = async (req: Request, res: Response) => {
+  try {
+    const news = await newsService.getAllNews();
+    res.status(StatusCodes.OK).json(news);
+  } catch (error) {
+    if (error instanceof Error) {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: error.message });
+    } else {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json("Something went wrong");
+    }
+  }
+};
+
 export const createNews = async (req: Request, res: Response) => {
   try {
     const news = newsSchema.parse(req.body);
@@ -48,9 +65,30 @@ export const deleteNews = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     await newsService.deleteNews(id);
-    res.status(StatusCodes.NO_CONTENT).send();
+    res.status(StatusCodes.OK).json({ message: "News deleted successfully" });
   } catch (error) {
     if (error instanceof Error) {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: error.message });
+    } else {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json("Something went wrong");
+    }
+  }
+};
+
+export const updateNews = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const news = newsSchema.parse(req.body);
+    const updatedNews = await newsService.updateNews(id, news);
+    res.status(StatusCodes.OK).json(updatedNews);
+  } catch (error) {
+    if (error instanceof ZodError) {
+      res.status(StatusCodes.BAD_REQUEST).json({ error: error.errors });
+    } else if (error instanceof Error) {
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: error.message });
