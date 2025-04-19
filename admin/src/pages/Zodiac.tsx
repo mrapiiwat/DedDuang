@@ -79,7 +79,10 @@ const Zodiac: React.FC = () => {
     if (!selectedItem) return;
     try {
       const res = await axios.delete(
-        `${BASE_URL}${DELETE_ITEM}${selectedItem.id}`
+        `${BASE_URL}${DELETE_ITEM}${selectedItem.id}`,
+        {
+          withCredentials: true,
+        }
       );
       toast.success(res.data.message);
       fetchData();
@@ -95,12 +98,17 @@ const Zodiac: React.FC = () => {
       if (isEditing && selectedItem) {
         const res = await axios.put(
           `${BASE_URL}${UPDATE_ITEM}${selectedItem.id}`,
-          formData
+          formData,
+          {
+            withCredentials: true,
+          }
         );
 
         toast.success(res.data.message);
       } else {
-        const res = await axios.post(`${BASE_URL}${CREATE_ITEM}`, formData);
+        const res = await axios.post(`${BASE_URL}${CREATE_ITEM}`, formData, {
+          withCredentials: true,
+        });
         toast.success(res.data.message);
       }
       fetchData();

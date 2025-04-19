@@ -77,7 +77,10 @@ const Tarot: React.FC = () => {
     if (!selectedItem) return;
     try {
       const res = await axios.delete(
-        `${BASE_URL}${DELETE_ITEM}${selectedItem.id}`
+        `${BASE_URL}${DELETE_ITEM}${selectedItem.id}`,
+        {
+          withCredentials: true,
+        }
       );
 
       toast.success(res.data.message || "ลบเรียบร้อย");
@@ -94,12 +97,17 @@ const Tarot: React.FC = () => {
       if (isEditing && selectedItem) {
         const res = await axios.put(
           `${BASE_URL}${UPDATE_ITEM}${selectedItem.id}`,
-          formData
+          formData,
+          {
+            withCredentials: true,
+          }
         );
 
         toast.success(res.data.message || "แก้ไขเรียบร้อย");
       } else {
-        const res = await axios.post(`${BASE_URL}${CREATE_ITEM}`, formData);
+        const res = await axios.post(`${BASE_URL}${CREATE_ITEM}`, formData, {
+          withCredentials: true,
+        });
         toast.success(res.data.message || "เพิ่มเรียบร้อย");
       }
       fetchData();

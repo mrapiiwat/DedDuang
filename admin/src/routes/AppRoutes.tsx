@@ -7,6 +7,7 @@ import CursedYear from "../pages/CursedYear";
 import Tarot from "../pages/Tarot";
 import Seemsee from "../pages/Seemsee";
 import Login from "../pages/auth/Login";
+import ProtectRoute from "./ProtectRoute";
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <Layout />,
+    element: <ProtectRoute element= {<Layout/>} />,
     children: [
       { index: true, element: <Home /> },
       { path: "zodiac", element: <Zodiac /> },

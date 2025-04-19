@@ -118,6 +118,7 @@ export const login = async (req: Request, res: Response) => {
         image: user.image,
         sex: user.sex,
         status: user.status,
+        role: user.role,
       },
       token: token,
     });
@@ -150,5 +151,29 @@ export const logout = async (req: Request, res: Response) => {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       error: "Internal server error",
     });
+  }
+};
+
+export const currentAdmin = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: "User information is missing" });
+      return;
+    }
+    const user = await authService.cuurrentAdmin(req.user.email);
+    res.status(StatusCodes.OK).send(user);
+    
+  } catch (error) {
+    if (error instanceof Error) {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: error.message });
+    } else {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json("Internal server error");
+    }
   }
 };

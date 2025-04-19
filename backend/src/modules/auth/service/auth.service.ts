@@ -14,3 +14,17 @@ export const findUserByEmail = async (email: string) => {
     },
   });
 };
+
+export const cuurrentAdmin = async (email: string) => {
+  return await prisma.user.findUnique({
+    where: {
+      email,
+    },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+    },
+  });
+};

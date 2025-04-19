@@ -57,7 +57,9 @@ const Home: React.FC = () => {
     e.preventDefault();
     try {
       setIsLoading(true);
-      await axios.post(`${BASE_URL}${CREATE_NEWS}`, formData);
+      await axios.post(`${BASE_URL}${CREATE_NEWS}`, formData, {
+        withCredentials: true,
+      });
       toast.success("เพิ่มข่าวเรียบร้อยแล้ว", { position: "bottom-right" });
       fetchData();
       setFormData({ title: "", url: "", imageUrl: "" });
@@ -74,10 +76,8 @@ const Home: React.FC = () => {
     if (!selectedNews) return;
     try {
       setIsLoading(true);
-      await axios.put(`${BASE_URL}${UPDATE_NEWS}${selectedNews.id}`, {
-        title: formData.title,
-        imageUrl: formData.imageUrl,
-        linkUrl: formData.url,
+      await axios.put(`${BASE_URL}${UPDATE_NEWS}${selectedNews.id}`, formData, {
+        withCredentials: true,
       });
       toast.success("อัปเดตข่าวเรียบร้อยแล้ว", { position: "bottom-right" });
       fetchData();
@@ -96,7 +96,9 @@ const Home: React.FC = () => {
     if (!selectedNews) return;
     try {
       setIsLoading(true);
-      await axios.delete(`${BASE_URL}${DELETE_NEWS}${selectedNews.id}`);
+      await axios.delete(`${BASE_URL}${DELETE_NEWS}${selectedNews.id}`, {
+        withCredentials: true,
+      });
       toast.success("ลบข่าวเรียบร้อยแล้ว", { position: "bottom-right" });
       setIsModalOpen(false);
       fetchData();

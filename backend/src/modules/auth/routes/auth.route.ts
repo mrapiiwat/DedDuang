@@ -2,6 +2,7 @@ import { Router } from "express";
 import * as authController from "../controller/auth.controller";
 import { upload } from "../../../common/middleware/upload";
 const router = Router();
+import authorizeAdmin from "../../../common/middleware/authorizeAdmin";
 
 /**
  * @swagger
@@ -219,5 +220,6 @@ router.get("/logout", authController.logout);
  *                     type: string
  *                     example: "Internal server error"
  */
+router.get("/current-admin",authorizeAdmin, authController.currentAdmin);
 
 export default router;

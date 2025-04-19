@@ -1,7 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import useAuthStore from "../../store/authStore";
+import { toast } from "react-toastify";
 import topLogo from "../../assets/top-logo.png";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
+  const actionLogin = useAuthStore((state) => state.actionLogin);
+  const actionLogout = useAuthStore((state) => state.actionLogout);
+  const user = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  useEffect(() => {
+    if (user) {
+      if (user.role === "ADMIN") {
+        navigate("/admin");
+      }
+      if (user.role === "USER") {
+        toast.error("คุณไม่มีสิทธิ์เข้าถึง", {
+          position: "bottom-right",
+        });
+        actionLogout();
+      }
+    } else {
+      navigate("/");
+    }
+  }, []);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      const res: any = await actionLogin(form);
+
+      if (res.data.user.role !== "ADMIN") {
+        toast.error("คุณไม่มีสิทธิ์เข้าถึง", {
+          position: "bottom-right",
+        });
+        await actionLogout();
+        return;
+      }
+
+      if (res.data.user.role === "ADMIN") {
+        toast.success("เข้าสู่ระบบสำเร็จ", {
+          position: "bottom-right",
+        });
+        navigate("/admin");
+      }
+    } catch (error) {
+      const errorMessage = (error as any).message || "เกิดข้อผิดพลาด";
+      toast.error(errorMessage, {
+        position: "bottom-right",
+      });
+    }
+  };
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <div className="bg-[#1A0040] w-full h-[39px] flex justify-center items-center fixed top-0 z-10">
@@ -14,10 +69,15 @@ const Login: React.FC = () => {
           </h1>
         </div>
         <div>
-          <form className="flex flex-col justify-center items-center">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col justify-center items-center"
+          >
             <div className="flex flex-col mt-10 gap-5">
               <div className="flex flex-col relative">
                 <input
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
                   type="email"
                   id="email"
                   className="pl-14 text-xl font-prompt w-[323px] h-[50px] rounded-full mt-2 px-3 bg-[#E9E6E1] placeholder:text-[#AFAFAF] "
@@ -34,6 +94,10 @@ const Login: React.FC = () => {
               </div>
               <div className="flex flex-col relative">
                 <input
+                  value={form.password}
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
                   type="password"
                   id="password"
                   className="pl-14 text-xl font-prompt w-[323px] h-[50px] rounded-full mt-2 px-3 bg-[#E9E6E1] placeholder:text-[#AFAFAF] "

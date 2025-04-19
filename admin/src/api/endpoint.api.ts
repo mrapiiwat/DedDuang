@@ -21,3 +21,8 @@ export const CATEGORY = "/api/category/";
 export const CREATE_ITEM = "/api/item/";
 export const DELETE_ITEM = "/api/item/";
 export const UPDATE_ITEM = "/api/item/";
+
+// Auth
+export const LOGIN = "/api/login";
+export const LOGOUT = "/api/logout";
+export const ADMIN = "/api/current-admin";
