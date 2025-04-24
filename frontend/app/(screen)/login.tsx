@@ -1,6 +1,5 @@
 import { View, Text, TextInput, Image, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
-import { loginImage } from "../../utils/loginImage";
 import { useRouter } from "expo-router";
 import { useAuthStore } from "@/store/authStore";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -92,7 +91,7 @@ const login = () => {
               />
               <View className="absolute top-1/2 -translate-y-1/2 left-1 bg-secondary h-[50] w-[50] rounded-full flex items-center justify-center">
                 <Image
-                  source={{ uri: loginImage[0] }}
+                  source={require("../../assets/images/email.png")}
                   className="w-[32] h-[32]"
                   resizeMode="contain"
                 />
@@ -110,7 +109,7 @@ const login = () => {
               />
               <View className="absolute top-1/2 -translate-y-1/2 left-1 bg-secondary h-[50] w-[50] rounded-full flex items-center justify-center">
                 <Image
-                  source={{ uri: loginImage[1] }}
+                  source={require("../../assets/images/key.png")}
                   className="w-[32] h-[32]"
                   resizeMode="contain"
                 />

@@ -2,7 +2,6 @@ import { View, StyleSheet, Image } from "react-native";
 import { useLinkBuilder } from "@react-navigation/native";
 import { PlatformPressable } from "@react-navigation/elements";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { tabbarIcon } from "../../utils/tabbarIcon";
 
 const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const { buildHref } = useLinkBuilder();
@@ -10,27 +9,23 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const icon = {
     index: (
       <Image
-        source={{
-          uri: tabbarIcon[0],
-        }}
+        source={require('../../assets/images/home.png')}
         className="w-[35] h-[35]"
         resizeMode="contain"
       />
     ),
     home: (
       <Image
-        source={{
-          uri: tabbarIcon[1],
-        }}
+        source={
+          require('../../assets/images/user.png')
+        }
         className="w-[35] h-[35]"
         resizeMode="contain"
       />
     ),
     seer: (
       <Image
-        source={{
-          uri: tabbarIcon[2],
-        }}
+        source={require('../../assets/images/ball.png')}
         className="w-[35] h-[35]"
         resizeMode="contain"
       />

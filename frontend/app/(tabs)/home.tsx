@@ -9,8 +9,17 @@ import {
 import React, { useEffect } from "react";
 import Profile from "../components/Profile";
 import { useRouter } from "expo-router";
-import { option, imageOption } from "../../utils/option";
-import { useAuthStore } from "@/store/authStore"; // Assuming useAuth provides a signIn function
+import { option } from "../../utils/option";
+import { useAuthStore } from "@/store/authStore";
+
+export const imageOption = {
+  img1: require("../../assets/images/zodi.png"),
+  img2: require("../../assets/images/year.png"),
+  img3: require("../../assets/images/seemsee.png"),
+  img4: require("../../assets/images/tarot.png"),
+  img5: require("../../assets/images/about.png"),
+  img6: require("../../assets/images/logout.png"),
+};
 
 const home = () => {
   const refreshUser = useAuthStore((state) => state.refreshUser);
@@ -51,8 +60,14 @@ const home = () => {
               <View className="flex flex-row items-center mb-4 gap-6 ">
                 <View className="w-[48] h-[48]">
                   <Image
-                    source={{ uri: imageOption[option.indexOf(item)] }}
-                    className="w-[40] h-[40] "
+                    source={
+                      imageOption[
+                        `img${
+                          option.indexOf(item) + 1
+                        }` as keyof typeof imageOption
+                      ]
+                    }
+                    className="w-[40px] h-[40px]"
                     resizeMode="contain"
                   />
                 </View>
